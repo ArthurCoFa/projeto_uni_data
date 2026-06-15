@@ -1,6 +1,9 @@
 # Projeto de Banco de Dados para uma Universidade
 
 Este projeto é uma implementação de um sistema de Banco de Dados para uma universidade fictícia no MYSQL para a matéria de Banco de Dados 2.
+Feito pelos alunos:
+- Arthur da Costa Farias
+- Gabriel Santin Alves Saab
 
 ---
 
