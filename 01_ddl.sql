@@ -1,33 +1,41 @@
-CREATE DATABASE teste_uni_data;
+-- Arquivo 01 - DDL: 
+-- Possui o CREATE DATABASE e os CREATE TABLE com todas as constraints
 
-USE teste_uni_data;
+CREATE DATABASE uni_data; -- Criação do Banco de Dados da universidade
+
+USE uni_data; -- Utilização do Banco de Dados criado
+
+/* 
+Tabela cursos: Representa os cursos que a universidade possui com nome do curso,
+carga horária total (ch_total), tipo de curso é graduação ou pós-graduação 
+*/
 
 CREATE TABLE cursos(
 	id_curso INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(120) NOT NULL,
     ch_total INT NOT NULL,
-    tipo ENUM('Graduacao', 'Pos-Graduacao')
+    tipo ENUM('Graduacao', 'Pos-Graduacao') NOT NULL,
+    CONSTRAINT chk_ch_curso CHECK(ch_total > 0)
 );
 
-ALTER TABLE cursos
-ADD CONSTRAINT 	chk_ch_curso
-CHECK(ch_total > 0);
-
-SHOW CREATE TABLE cursos;
+/*
+Tabela disciplinas: Representa as disciplinas que são ofertadas por cada curso,
+contendo nome da disciplina, carga horária, créditos, ementa(opcional).
+*/
 
 CREATE TABLE disciplinas(
 	id_disc INT PRIMARY KEY AUTO_INCREMENT,
     nome VARCHAR(120) NOT NULL,
     ch INT NOT NULL,
     creditos INT NOT NULL,
-    ementa TEXT,
+    ementa TEXT DEFAULT NULL,
     CONSTRAINT chk_ch_disc CHECK(ch > 0),
     CONSTRAINT chk_creditos_disc CHECK(creditos > 0)
 );
 
-DROP TABLE disciplinas;
-
-SHOW CREATE TABLE disciplinas;
+/*
+Tabela pré-requisitos: Representa disciplinas que possuem pré-requisitos.
+*/
 
 CREATE TABLE pre_requisitos(
 	id_disc INT NOT NULL,
@@ -37,9 +45,10 @@ CREATE TABLE pre_requisitos(
     CONSTRAINT chk_no_self_req CHECK(id_disc != id_pre_req)
 );
 
-DROP TABLE pre_requisitos;
-
-SHOW CREATE TABLE pre_requisitos;
+/*
+Tabela curso_disciplina: Representa o relacionamento entre as disciplinas dentro do curso,
+definindo se a disciplina é obrigatória ou opcional.
+*/
 
 CREATE TABLE curso_disciplina(
 	id_curso INT NOT NULL,
@@ -49,7 +58,10 @@ CREATE TABLE curso_disciplina(
     CONSTRAINT fk_disc_curso FOREIGN KEY (id_disc) REFERENCES disciplinas(id_disc)
 );
 
-SHOW CREATE TABLE curso_disciplina;
+/*
+Tabela professores: Representa os professores que possuem cpf, email, titulação (mestre, doutor ou pós-doutor)
+e se é coordenador de algum curso(id_curso_coord).
+*/
 
 CREATE TABLE professores (
 	id_prof INT PRIMARY KEY AUTO_INCREMENT,
@@ -63,9 +75,10 @@ CREATE TABLE professores (
     CONSTRAINT uq_email_prof UNIQUE(email)
 );
 
-DROP TABLE professores;
-
-SHOW CREATE TABLE professores;
+/*
+Tabela turmas: Representa a turma com a disciplina ofertada por ela possuindo disciplina, professor, 
+semestre (1 ou 2), ano e capacidade.
+*/
    
 CREATE TABLE turmas (
     id_turma INT PRIMARY KEY AUTO_INCREMENT,
@@ -81,6 +94,10 @@ CREATE TABLE turmas (
     CONSTRAINT chk_capacidade CHECK(capacidade > 0)
 );
 
+/*
+Tabela alunos: Representa os alunos que podem ser matriculados e qual o seu curso escolhido.
+*/
+
 CREATE TABLE alunos (
 	id_aluno INT PRIMARY KEY AUTO_INCREMENT,
 	nome VARCHAR(120) NOT NULL,
@@ -92,6 +109,11 @@ CREATE TABLE alunos (
     CONSTRAINT uq_email_aluno UNIQUE(email),
 	CONSTRAINT fk_id_curso FOREIGN KEY (id_curso) REFERENCES cursos (id_curso)
 );
+
+/*
+Tabela matrículas: Representa as matrículas de alunos nas turmas com suas notas, frequências 
+e situção de aprovação, reprovação ou em curso.
+*/
 
 CREATE TABLE matriculas(
 	id_mat INT PRIMARY KEY AUTO_INCREMENT,
@@ -108,4 +130,7 @@ CREATE TABLE matriculas(
     CONSTRAINT chk_frequencia CHECK(frequencia BETWEEN 0 AND 100)
 );
 
+/* Como curiosidade é possível analizar a criação de tabelas com:
 
+	SHOW CREATE TABLE nome_da_tabela;
+*/

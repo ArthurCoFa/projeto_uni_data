@@ -1,9 +1,17 @@
+-- Arquivo 02 - DML: 
+-- Possui os INSERTs de carga de dados como exemplos.
+
+/* Caso deseje verificar as inserções utilize:
+
+	SELECT * FROM nome_da_tabela;
+*/
+
+
 INSERT INTO cursos(nome, ch_total, tipo) VALUES 
 ('Engenharia de Computação', 3600, 'Graduacao'),
 ('Ciência da Computação', 3400, 'Graduacao'),
 ('Inteligência Artificial e Machine Learning', 360, 'Pos-Graduacao');
 
-SELECT * FROM cursos;
 
 INSERT INTO disciplinas(nome, ch, creditos) VALUES
 ('Banco de Dados 1', 60, 4),
@@ -18,24 +26,16 @@ INSERT INTO disciplinas(nome, ch, creditos) VALUES
 ('Lógica de Programação', 60, 4),
 ('Bootcamp 2', 60, 4);
 
-SELECT * FROM disciplinas;
 
 INSERT INTO pre_requisitos(id_disc, id_pre_req) VALUES
 (2, 1),	(11, 6), (9, 10);
 
--- RN04: Uma disciplina não pode ser pré-requisito dela mesma.
-INSERT INTO pre_requisitos(id_disc, id_pre_req) VALUES (1, 1);
-
-SELECT * FROM pre_requisitos;
 
 INSERT INTO curso_disciplina(id_curso, id_disc, obrigatoria) VALUES
 (1, 1, TRUE), (1, 2, TRUE), (1, 3, FALSE), (1, 4, TRUE), (1, 5, TRUE), (1, 10, TRUE), (1, 9, TRUE), (1, 6, FALSE),
-
 (2, 1, TRUE), (2, 2, TRUE), (2, 6, TRUE), (2, 11, FALSE), (2, 4, TRUE), (2, 5, FALSE), (2, 7, TRUE),
-
 (3, 3, TRUE), (3, 8, TRUE), (3, 7, TRUE), (3, 9, FALSE), (3, 10, FALSE), (3, 11, FALSE);
 
-SELECT * FROM curso_disciplina;
 
 INSERT INTO professores(nome, cpf, email, titulacao, id_curso_coord) VALUES
 ('Hudson','12345678912', 'hudson@gmail.com', 'Mestre', 1),
@@ -44,7 +44,6 @@ INSERT INTO professores(nome, cpf, email, titulacao, id_curso_coord) VALUES
 ('Vera', '00011122233', 'vera@yahoo.com', 'Mestre', NULL),
 ('Molina','33388866622', 'molina@gmail.com', 'Mestre', NULL);
 
-SELECT * FROM professores;
 
 INSERT INTO turmas(id_disc, id_prof, semestre, ano, capacidade) VALUES
 (2, 3, 1, 2026, 57),
@@ -56,7 +55,6 @@ INSERT INTO turmas(id_disc, id_prof, semestre, ano, capacidade) VALUES
 (6, 1, 2, 2026, 1),
 (1, 1, 1, 2027, 1);
 
-SELECT * FROM turmas;
 
 INSERT INTO alunos(nome, cpf, email, dt_nasc, id_curso) VALUES
 ('Arthur', '12312312312', 'arthur@hotmail.com', '2007-01-22', 1),
@@ -70,39 +68,72 @@ INSERT INTO alunos(nome, cpf, email, dt_nasc, id_curso) VALUES
 ('Luiz', '00033344499', 'luiz@gmail.com', '1999-01-01', 3),
 ('Manuela', '99977755533', 'manu@gmail.com', '2007-06-02', 1);
 
-SELECT * FROM alunos;
+
+INSERT INTO matriculas(id_aluno, id_turma, nota, frequencia, situacao) VALUES
+(1, 1, 9, 100, 'Aprovado'), 
+(2, 1, 7.8, 90, 'Aprovado'), 
+(3, 2, 8.1, 80, 'Aprovado'), 
+(4, 2, 4.3, 100,'Reprovado por Nota'),
+(5, 3, 2.9, 100, 'Reprovado por Nota'), 
+(6, 3, 10, 30, 'Reprovado por Falta'), 
+(7, 3, 8.7, 20, 'Reprovado por Falta');
 
 INSERT INTO matriculas(id_aluno, id_turma) VALUES
-(1, 1),
-(2, 1),
-(3, 2),
-(4, 2),
-(5, 3),
-(6, 3),
-(7, 3),
-(8, 4),
-(9, 5),
-(10, 5),
-(1, 4),
-(1, 5),
-(4, 3),
-(4, 5),
-(4, 1),
-(5, 5),
-(6, 5);
+(8, 4), (9,5), (10, 5), (1, 4), (1, 5),
+(4, 3), (4, 5), (4, 1), (5, 5), (6, 5);
 
-SELECT * FROM matriculas;
+-- TESTE DAS REGRAS DE NEGÓCIO (RN)
 
--- Verificação da RN 09: Um aluno não pode ter duas matrículas ativas na mesma turma.
-INSERT INTO matriculas(id_aluno, id_turma, nota, frequencia)
-VALUES (1, 1, 8, 100);
+/* 
+Verificação da RN04: Uma disciplina não pode ser pré-requisito dela mesma.
 
-INSERT INTO matriculas(id_aluno, id_turma)
-VALUES (6, 5);
+	INSERT INTO pre_requisitos(id_disc, id_pre_req) VALUES (1, 1);
+*/
 
-INSERT INTO matriculas(id_aluno, id_turma)
-VALUES (6, 6), (5, 6);
+/*
+Verificação da RN07: O semestre só pode ser 1 ou 2. O ano deve ser 2000 ou posterior.
+	
+    INSERT INTO turmas(id_disc, id_prof, semestre, ano, capacidade) VALUES
+    (1, 3, 3, 2026, 20);
+    
+    INSERT INTO turmas(id_disc, id_prof, semestre, ano, capacidade) VALUES
+    (1, 2, 1, 1999, 20);
+*/
 
--- RN12:  Se uma turma for excluída do sistema, todas as matrículas associadas devem ser excluídas automaticamente.
-DELETE FROM turmas
-WHERE id_turma = 6;
+/* 
+Verificação da RN 09: Um aluno não pode ter duas matrículas ativas na mesma turma.
+
+	INSERT INTO matriculas(id_aluno, id_turma)
+	VALUES (6, 5);
+
+	INSERT INTO matriculas(id_aluno, id_turma)
+	VALUES (6, 6), (5, 6);
+*/
+
+/* 
+Verificação da RN10:  Cada matrícula registra nota final (0,0 a 10,0) e percentual de frequência (0 a 100).
+	
+    INSERT INTO matriculas(id_aluno, id_turma, nota, frequencia) VALUES
+    (1, 8, 100, 80);
+    
+    INSERT INTO matriculas(id_aluno, id_turma, nota, frequencia) VALUES
+    (1, 8, 9, 112);
+*/
+
+/*
+Verificação da RN12:  Se uma turma for excluída do sistema, todas as matrículas associadas devem ser excluídas 
+automaticamente.
+	
+    DELETE FROM turmas
+	WHERE id_turma = 6;
+*/
+
+/*
+Verificação da RN13:  CPF e e-mail são únicos por entidade (aluno e professor possuem seus próprios escopos de unicidade).
+	
+    INSERT INTO alunos(nome, cpf, email, dt_nasc, id_curso) VALUES
+	('Teste alunos', '12312312312', 'email@hotmail.com', '2001-10-12', 1);
+    
+    INSERT INTO professores(nome, cpf, email, titulacao, id_curso_coord) VALUES
+	('Teste professores','12345678912', 'email@gmail.com', 'Mestre', NULL);
+*/
