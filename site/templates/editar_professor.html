@@ -1,0 +1,35 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <h3>Atualizar informações do aluno</h3>
+    <form action="/atualizar-professor/{{ professor.id_prof }}" method="POST">
+
+        <input type="text" name="nome" placeholder="Nome do professor" value="{{ professor.nome }}" required>
+
+        <input type="text" name="cpf" id="cpf" value="{{ professor.cpf }}" 
+            placeholder="000.000.000-00" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" 
+            title="Digite um CPF válido no formato 000.000.000-00" maxlength="14" required>
+
+        <input type="text" name="email" placeholder="Email do professor" value="{{ professor.email }}" required>
+        
+        <label for="curso">Coordenador do curso:</label>
+            <select name="id_curso_coord" id="curso" required>
+                    <option value="0">Nenhum</option>
+                {% for curso in cursos %}
+                    <option value="{{ curso.id_curso }}"
+                        {% if curso.id_curso == professor.id_curso_coord %} selected {% endif %}>
+                        {{ curso.nome }}</option>
+                {% endfor %}
+            </select>
+
+        <label for="titulacao">Titulacao:</label>
+        <select name="titulacao" id="titulacao" required>
+            <option value="" disabled selected>Selecione uma titulação</option>
+            <option value="Mestre">Mestre</option>
+            <option value="Doutor">Doutor</option>
+            <option value="Pos-doutor">Pos-doutor</option>
+        </select>
+        
+        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+    </form>
+{% endblock %}

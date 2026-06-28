@@ -1,0 +1,69 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <h3>Adicionar novo aluno</h3>
+    <form action="/adicionar-alunos" method="POST">
+        <input type="text" name="nome" placeholder="Nome do aluno" required>
+
+        <input type="text" name="cpf" id="cpf" placeholder="000.000.000-00" 
+            pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" title="Digite um CPF válido no formato 000.000.000-00" maxlength="14" required>
+
+        <input type="text" name="email" placeholder="Email do aluno" required>
+
+        <label for="curso">Curso:</label>
+            <select name="id_curso" id="curso" required>
+                {% for curso in cursos %}
+                    <option value="{{ curso.id_curso }}">{{ curso.nome }}</option>
+                {% endfor %}
+            </select>
+
+        <input type="date" name="data_nascimento" required>
+        <button type="submit">Cadastrar aluno</button>
+    </form>
+
+    <h3>Pesquisar alunos</h3>
+
+    <form action="/alunos" method="GET" class="d-flex mb-3">
+        <input type="text" name="busca" class="form-control me-2" 
+            placeholder="Pesquisar por nome ou ID... (Deixe em branco para listar todos)" value="{{ busca }}">
+        <button type="submit" class="btn btn-primary">Buscar</button>
+        <a href="/alunos" class="btn btn-secondary ms-2">Limpar</a>
+    </form>
+
+    <h1 class="mb-4">Lista de Alunos</h1>
+
+    <table class="table table-striped table-hover border">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>email</th>
+                <th>data de nascimento</th>
+                <th>curso</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for aluno in alunos %}
+            <tr>
+                <td>{{ aluno.id_aluno }}</td>
+                <td>{{ aluno.nome }}</td>
+                <td>{{ aluno.cpf }}</td>
+                <td>{{ aluno.email }}</td>
+                <td>{{ aluno.dt_nasc }}</td>
+                <td>{{ aluno.curso }}</td>
+                <td>
+                    <a href="/editar-aluno/{{ aluno.id_aluno }}" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="/excluir-aluno/{{ aluno.id_aluno }}" 
+                    class="btn btn-danger btn-sm" 
+                    onclick="return confirm('Tem certeza que deseja excluir este aluno?')">
+                    Excluir
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+{% endblock %}
