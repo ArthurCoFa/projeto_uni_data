@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h3>Atualizar informações do aluno</h3>
+    <form action="/atualizar-curso/{{ curso.id_curso }}" method="POST">
+
+        <input type="text" name="nome" placeholder="Nome do curso" value="{{ curso.nome }}" required>
+
+        <input type="int" name="carga_horaria_total" placeholder="Carga Horária Total" value="{{ curso.ch_total }}" required>
+
+        <label for="tipo">Tipo:</label>
+        <select name="tipo" id="tipo" required>
+            <option value="" disabled selected>Selecione um tipo</option>
+            <option value="Graduacao">Graduação</option>
+            <option value="Pos-Graduacao">Pós-Graduação</option>
+        </select>
+        
+        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+    </form>
+
+{% endblock %}

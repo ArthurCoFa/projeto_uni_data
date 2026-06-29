@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <h3>Atualizar informações do aluno</h3>
+    <h3>Atualizar informações do professor</h3>
     <form action="/atualizar-professor/{{ professor.id_prof }}" method="POST">
 
         <input type="text" name="nome" placeholder="Nome do professor" value="{{ professor.nome }}" required>

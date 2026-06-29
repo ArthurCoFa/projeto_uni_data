@@ -1,0 +1,58 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <h3>Adicionar curso</h3>
+    <form action="/adicionar-disciplina" method="POST">
+        <input type="text" name="nome" placeholder="Nome da disciplina" required>
+
+        <input type="int" name="carga_horaria" placeholder="Carga Horária" required>
+
+        <input type="int" name="creditos" placeholder="creditos da disciplina" required>
+
+        <input type="text" name="ementa" placeholder="ementa">
+
+        <button type="submit">Cadastrar curso</button>
+    </form>
+
+    <h3>Pesquisar Curso:</h3>
+
+    <form action="/disciplinas" method="GET" class="d-flex mb-3">
+        <input type="text" name="busca" class="form-control me-2" 
+            placeholder="Pesquisar por nome ou ID... (Deixe em branco para listar todos)" value="{{ busca }}">
+        <button type="submit" class="btn btn-primary">Buscar</button>
+        <a href="/disciplinas" class="btn btn-secondary ms-2">Limpar</a>
+    </form>
+
+    <h1>Lista de cursos</h1>
+        <table class="table table-striped table-hover border">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Carga Horária</th>
+                    <th>Creditos</th>
+                    <th>Ementa</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for disciplina in disciplinas %}
+                <tr>
+                    <td>{{ disciplina.id_disc }}</td>
+                    <td>{{ disciplina.nome }}</td>
+                    <td>{{ disciplina.ch }}</td>
+                    <td>{{ disciplina.creditos }}</td>
+                    <td>{{ disciplina.ementa }}</td>
+                    <td>
+                        <a href="/editar-disciplina/{{ disciplina.id_disc }}" class="btn btn-warning btn-sm">Editar</a>
+                        <a href="/excluir-disciplina/{{ disciplina.id_disc }}" 
+                        class="btn btn-danger btn-sm" 
+                        onclick="return confirm('Tem certeza que deseja excluir este aluno?')">
+                        Excluir
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+{% endblock %}
