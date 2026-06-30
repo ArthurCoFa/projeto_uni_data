@@ -1,11 +1,32 @@
-from flask import Blueprint, render_template, request, redirect, flash
-from db import get_db_connection
+from flask import Blueprint, render_template, request, redirect, flash, url_for
+from db import get_db_connection, contar_registros, PER_PAGE
+from math import ceil
 
 disciplinas_bp = Blueprint('disciplinas', __name__)
 
+TABELA = 'disciplinas'
+
 @disciplinas_bp.route('/disciplinas')
 def pagina_disciplinas():
+
     busca = request.args.get('busca', '')
+
+    page = int(request.args.get('page', 1))  # Pega a página, padrão é 1
+
+    total_registros = contar_registros(TABELA, busca=busca)
+
+    total_paginas = ceil(total_registros / PER_PAGE) if total_registros > 0 else 1
+
+    if page < 1: 
+        flash("Você foi redirecionado para a primeira página disponível.")
+        return redirect(url_for('disciplinas.pagina_disciplinas', page=1, busca=busca))
+    elif page > total_paginas: 
+        flash("Você foi redirecionado para a última página disponível.")
+        return redirect(url_for('disciplinas.pagina_disciplinas', page=total_paginas, busca=busca))
+        
+
+    offset = (page - 1) * PER_PAGE          # Cálculo do pulo
+
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
@@ -15,17 +36,20 @@ def pagina_disciplinas():
             cursor.execute("SELECT d.* FROM disciplinas d WHERE d.id_disc = %s", (busca,))
         else:
             # Busca por Nome
-            cursor.execute("SELECT d.* FROM disciplinas d WHERE d.nome LIKE %s ORDER BY d.id_disc", ('%' + busca + '%',))
+            querry = "SELECT d.* FROM disciplinas d WHERE d.nome LIKE %s ORDER BY d.id_disc " \
+            "LIMIT %s OFFSET %s"
+            cursor.execute(querry, ('%' + busca + '%', PER_PAGE, offset))
     else:
         # Traz todos
-        cursor.execute("SELECT d.* FROM disciplinas d ORDER BY d.id_disc")
+        querry = "SELECT d.* FROM disciplinas d ORDER BY d.id_disc LIMIT %s OFFSET %s"
+        cursor.execute(querry, (PER_PAGE, offset))
 
     disciplinas = cursor.fetchall() 
     cursor.close()
     conn.close()
     
     # O segredo é que o render_template precisa enviar essa variável atualizada
-    return render_template('disciplinas.html', busca=busca, disciplinas=disciplinas)
+    return render_template('disciplinas.html', busca=busca, disciplinas=disciplinas, page=page, total_paginas=total_paginas)
 
 @disciplinas_bp.route('/adicionar-disciplina', methods=['POST'])
 def adicionar_disciplina():

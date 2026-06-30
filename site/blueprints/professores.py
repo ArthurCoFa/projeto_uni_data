@@ -1,11 +1,31 @@
-from flask import Blueprint, render_template, request, redirect, flash
-from db import get_db_connection
+from flask import Blueprint, render_template, request, redirect, flash, url_for
+from db import get_db_connection, contar_registros, PER_PAGE
+from math import ceil
 
 professores_bp = Blueprint('professores', __name__)
 
+TABELA = 'professores'
+
 @professores_bp.route('/professores')
 def pagina_professores():
+
     busca = request.args.get('busca', '')
+
+    page = int(request.args.get('page', 1))  # Pega a página, padrão é 1
+
+    total_registros = contar_registros(TABELA, busca=busca)
+
+    total_paginas = ceil(total_registros / PER_PAGE) if total_registros > 0 else 1
+
+    if page < 1: 
+        flash("Você foi redirecionado para a primeira página disponível.")
+        return redirect(url_for('professores.pagina_professores', page=1, busca=busca))
+    elif page > total_paginas: 
+        flash("Você foi redirecionado para a última página disponível.")
+        return redirect(url_for('professores.pagina_professores', page=total_paginas, busca=busca))
+
+    offset = (page - 1) * PER_PAGE          # Cálculo do pulo
+
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
@@ -15,20 +35,30 @@ def pagina_professores():
     if busca:
         if busca.isdigit():
             # Busca por ID
-            cursor.execute("SELECT p.*, c.nome AS curso FROM professores p LEFT JOIN cursos c ON p.id_curso_coord = c.id_curso WHERE p.id_prof = %s", (busca,))
+            querry = "SELECT p.*, c.nome AS curso " \
+            "FROM professores p LEFT JOIN cursos c ON p.id_curso_coord = c.id_curso " \
+            "WHERE p.id_prof = %s"
+            cursor.execute(querry, (busca,))
         else:
             # Busca por Nome
-            cursor.execute("SELECT p.*, c.nome AS curso FROM professores p LEFT JOIN cursos c ON p.id_curso_coord = c.id_curso WHERE p.nome LIKE %s ORDER BY p.id_prof", ('%' + busca + '%',))
+            querry = "SELECT p.*, c.nome AS curso " \
+            "FROM professores p LEFT JOIN cursos c ON p.id_curso_coord = c.id_curso " \
+            "WHERE p.nome LIKE %s ORDER BY p.id_prof " \
+            "LIMIT %s OFFSET %s"
+            cursor.execute(querry, ('%' + busca + '%', PER_PAGE, offset))
     else:
         # Traz todos
-        cursor.execute("SELECT p.*, c.nome AS curso FROM professores p LEFT JOIN cursos c ON p.id_curso_coord = c.id_curso ORDER BY p.id_prof")
+        querry = "SELECT p.*, c.nome AS curso " \
+        "FROM professores p LEFT JOIN cursos c ON p.id_curso_coord = c.id_curso ORDER BY p.id_prof " \
+        "LIMIT %s OFFSET %s"
+        cursor.execute(querry, (PER_PAGE, offset))
 
     professores = cursor.fetchall() # A variável 'alunos' é atualizada aqui!
     cursor.close()
     conn.close()
     
     # O segredo é que o render_template precisa enviar essa variável atualizada
-    return render_template('professores.html', professores=professores, busca=busca, cursos=cursos)
+    return render_template('professores.html', professores=professores, busca=busca, cursos=cursos, page=page, total_paginas=total_paginas)
 
 @professores_bp.route('/adicionar-professor', methods=['POST'])
 def adicionar_professor():

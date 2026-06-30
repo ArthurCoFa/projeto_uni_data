@@ -45,7 +45,8 @@
                     <td>{{ curso.ch_total }}</td>
                     <td>{{ curso.tipo }}</td>
                     <td>
-                        <a href="/editar-curso/{{ curso.id_curso }}" class="btn btn-warning btn-sm">Editar</a>
+                        <a href="/editar-curso/{{ curso.id_curso }}" class="btn btn-warning btn-sm">Editar Curso</a>
+                        <a href="/cursos/{{ curso.id_curso }}/editar-disciplinas-curso" class="btn btn-warning btn-sm">Editar Disciplinas</a>
                         <a href="/excluir-curso/{{ curso.id_curso }}" 
                         class="btn btn-danger btn-sm" 
                         onclick="return confirm('Tem certeza que deseja excluir este aluno?')">
@@ -56,4 +57,14 @@
                 {% endfor %}
             </tbody>
         </table>
+        <nav>
+            <ul class="pagination">
+                <li class="page-item {% if page <= 1 %}disabled{% endif %}">
+                    <a class="page-link" href="/cursos?page={{ page - 1 }}&busca={{ busca }}">Anterior</a>
+                </li>
+                <li class="page-item {% if page >= total_paginas %}disabled{% endif %}">
+                    <a class="page-link" href="/cursos?page={{ page + 1 }}&busca={{ busca }}">Próximo</a>
+                </li>
+            </ul>
+        </nav>
 {% endblock %}

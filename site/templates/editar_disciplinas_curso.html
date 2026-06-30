@@ -1,0 +1,55 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <h3>Adicionar disciplina no curso {{ curso.nome }}</h3>
+
+    <form method="POST" action="/cursos/{{ curso.id_curso }}/adicionar-disciplina-curso">
+
+        <select name="disciplina_id" class="form-control" required>
+            {% for d in todas_disciplinas %}
+                <option value="{{ d.id_disc }}">{{ d.disciplina }}</option>
+            {% endfor %}
+        </select>
+        
+        <label>
+            <input type="checkbox" name="obrigatoria" value="1"> Disciplina Obrigatória?
+        </label>
+        
+        <button type="submit" class="btn btn-primary">Adicionar</button>
+    </form>
+
+    <h1>Lista de disciplina do curso {{ curso.nome }} </h1>
+        <table class="table table-striped table-hover border">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nome da disciplina</th>
+                    <th>Obrigatoriedade</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for disciplina_curso in disciplinas_curso %}
+                <tr>
+                    <td>{{ disciplina_curso.disciplina }}</td>
+                    <td>{% if disciplina_curso.obrigatoria == 1 %}
+                        Obrigatória
+                        {% else %}
+                        Não Obrigatoria
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{{ url_for('cursos.alternar_obrigatoriedade_disciplina', 
+                        curso_id=disciplina_curso.id_curso, disc_id=disciplina_curso.id_disc) }}" 
+                        class="btn btn-warning btn-sm">Alterar Obrigatoriedade</a>
+                        <a href="{{ url_for('cursos.excluir_disciplina_curso', 
+                        curso_id=disciplina_curso.id_curso, disc_id=disciplina_curso.id_disc) }}" 
+                        class="btn btn-danger btn-sm" 
+                        onclick="return confirm('Tem certeza que deseja excluir este aluno?')">
+                        Excluir Disciplina do Curso
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+{% endblock %}

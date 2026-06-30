@@ -75,4 +75,14 @@
             {% endfor %}
         </tbody>
     </table>
+    <nav>
+        <ul class="pagination">
+            <li class="page-item {% if page <= 1 %}disabled{% endif %}">
+                <a class="page-link" href="/professores?page={{ page - 1 }}&busca={{ busca }}">Anterior</a>
+            </li>
+            <li class="page-item {% if page >= total_paginas %}disabled{% endif %}">
+                <a class="page-link" href="/professores?page={{ page + 1 }}&busca={{ busca }}">Próximo</a>
+            </li>
+        </ul>
+    </nav>
 {% endblock %}
