@@ -108,7 +108,7 @@ def editar_disciplina(id):
     return render_template('editar_disciplina.html', disciplina=disciplina)
 
 @disciplinas_bp.route('/atualizar-disciplina/<int:id>', methods=['POST'])
-def atualizar_dsiciplina(id):
+def atualizar_disciplina(id):
 
     nome = request.form['nome']
     
@@ -131,3 +131,67 @@ def atualizar_dsiciplina(id):
     
     flash("Dados atualizados com sucesso!")
     return redirect('/disciplinas')
+
+@disciplinas_bp.route('/disciplinas/<int:id>/editar-pre-requisitos')
+def editar_pre_requisitos(id):
+
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    querry = "SELECT d.nome AS disciplina, d.id_disc AS id_d FROM disciplinas d JOIN pre_requisitos pr ON d.id_disc = pr.id_pre_req WHERE pr.id_disc = %s"
+    cursor.execute(querry, (id,))
+
+    pre_requisitos = cursor.fetchall()
+
+    querry = "SELECT id_disc, nome FROM disciplinas WHERE id_disc = %s"
+    cursor.execute(querry, (id,))
+
+    disciplina = cursor.fetchone()
+
+    querry = "SELECT * FROM disciplinas WHERE id_disc != %s AND id_disc NOT IN " \
+    "(SELECT id_pre_req FROM pre_requisitos WHERE id_disc = %s)"
+    cursor.execute(querry, (id, id,))
+    
+    disciplinas = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template('editar_pre_requisitos.html', disciplinas=disciplinas, disciplina=disciplina, pre_requisitos=pre_requisitos)
+
+@disciplinas_bp.route('/disciplinas/<int:id>/adicionar-pre-requisito', methods=['POST'])
+def adicionar_pre_requisito(id):
+
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    id_pre_req = request.form['pre-requisito']
+
+    querry = "INSERT INTO pre_requisitos (id_disc, id_pre_req) " \
+    "VALUES (%s, %s)"
+
+    cursor.execute(querry, (id, id_pre_req))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+    
+    flash("Dados atualizados com sucesso!")
+    return redirect(url_for('disciplinas.editar_pre_requisitos', id=id))
+
+
+@disciplinas_bp.route('/disciplinas/<int:id_disc>/excluir-pre-requisito/<int:id_pre_req>')
+def excluir_pre_requisito(id_disc, id_pre_req):
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Executa o delete usando o ID recebido na URL
+    cursor.execute("DELETE FROM pre_requisitos WHERE id_disc = %s AND id_pre_req = %s", (id_disc, id_pre_req))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+    
+    flash("Disciplina excluída com sucesso!")
+    return redirect(url_for('disciplinas.editar_pre_requisitos', id=id_disc))

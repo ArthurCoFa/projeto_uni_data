@@ -60,10 +60,16 @@
         <nav>
             <ul class="pagination">
                 <li class="page-item {% if page <= 1 %}disabled{% endif %}">
+                    <a class="page-link" href="/cursos?page={{ 1 }}&busca={{ busca }}">Primeira Página</a>
+                </li>
+                <li class="page-item {% if page <= 1 %}disabled{% endif %}">
                     <a class="page-link" href="/cursos?page={{ page - 1 }}&busca={{ busca }}">Anterior</a>
                 </li>
                 <li class="page-item {% if page >= total_paginas %}disabled{% endif %}">
                     <a class="page-link" href="/cursos?page={{ page + 1 }}&busca={{ busca }}">Próximo</a>
+                </li>
+                <li class="page-item {% if page >= total_paginas %}disabled{% endif %}">
+                    <a class="page-link" href="/cursos?page={{ total_paginas }}&busca={{ busca }}">Última página</a>
                 </li>
             </ul>
         </nav>

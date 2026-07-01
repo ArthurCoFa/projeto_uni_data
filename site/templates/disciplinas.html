@@ -44,7 +44,8 @@
                     <td>{{ disciplina.creditos }}</td>
                     <td>{{ disciplina.ementa }}</td>
                     <td>
-                        <a href="/editar-disciplina/{{ disciplina.id_disc }}" class="btn btn-warning btn-sm">Editar</a>
+                        <a href="/editar-disciplina/{{ disciplina.id_disc }}" class="btn btn-warning btn-sm">Editar disciplina</a>
+                        <a href="/disciplinas/{{ disciplina.id_disc }}/editar-pre-requisitos" class="btn btn-warning btn-sm">Editar pré-requisitos</a>
                         <a href="/excluir-disciplina/{{ disciplina.id_disc }}" 
                         class="btn btn-danger btn-sm" 
                         onclick="return confirm('Tem certeza que deseja excluir este aluno?')">
@@ -58,10 +59,16 @@
         <nav>
             <ul class="pagination">
                 <li class="page-item {% if page <= 1 %}disabled{% endif %}">
+                    <a class="page-link" href="/disciplinas?page={{ 1 }}&busca={{ busca }}">Primeira Página</a>
+                </li>
+                <li class="page-item {% if page <= 1 %}disabled{% endif %}">
                     <a class="page-link" href="/disciplinas?page={{ page - 1 }}&busca={{ busca }}">Anterior</a>
                 </li>
                 <li class="page-item {% if page >= total_paginas %}disabled{% endif %}">
                     <a class="page-link" href="/disciplinas?page={{ page + 1 }}&busca={{ busca }}">Próximo</a>
+                </li>
+                <li class="page-item {% if page >= total_paginas %}disabled{% endif %}">
+                    <a class="page-link" href="/disciplinas?page={{ total_paginas }}&busca={{ busca }}">Última página</a>
                 </li>
             </ul>
         </nav>

@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<h3>Adicionar turma</h3>
+    <form action="/turmas/{{ turma.id_turma }}/atualizar_turma" method="POST">
+
+        <label for="id_disciplina">Disciplina:</label>
+            <select name="id_disc" id="id_disc" required>
+                {% for disciplina in disciplinas %}
+                    <option value="{{ disciplina.id_disc }}">{{ disciplina.nome }}</option>
+                {% endfor %}
+            </select>
+
+        <label for="id_prof">Disciplina:</label>
+            <select name="id_prof" id="id_prof" required>
+                {% for professor in professores %}
+                    <option value="{{ professor.id_prof }}">{{ professor.nome }}</option>
+                {% endfor %}
+            </select>
+
+        <input type="int" name="semestre" placeholder="semestre" required>
+
+        <input type="int" name="ano" placeholder="ano" required>
+
+        <input type="int" name="capacidade" placeholder="capacidade" required>
+
+        <button type="submit">Atualizar turma</button>
+    </form>
+{% endblock %}
