@@ -36,7 +36,8 @@ def pagina_alunos():
     if busca:
         if busca.isdigit():
             # Busca por ID
-            cursor.execute("SELECT a.*, c.nome AS curso FROM alunos a JOIN cursos c ON a.id_curso = c.id_curso WHERE a.id_aluno = %s", (busca,))
+            querry = "SELECT a.*, c.nome AS curso FROM alunos a JOIN cursos c ON a.id_curso = c.id_curso WHERE a.id_aluno = %s"
+            cursor.execute(querry, (busca,))
         else:
             # Busca por Nome
             querry = "SELECT a.*, c.nome AS curso " \
@@ -52,14 +53,15 @@ def pagina_alunos():
         cursor.execute(querry, (PER_PAGE, offset))
 
     alunos = cursor.fetchall() # A variável 'alunos' é atualizada aqui!
+
     cursor.close()
     conn.close()
 
-    # O segredo é que o render_template precisa enviar essa variável atualizada
     return render_template('alunos.html', alunos=alunos, busca=busca, cursos=cursos, page=page, total_paginas=total_paginas)
 
-@alunos_bp.route('/adicionar-alunos', methods=['POST'])
+@alunos_bp.route('/alunos/adicionar-alunos', methods=['POST'])
 def adicionar_aluno():
+
     # Captura os dados enviados pelo formulário
     nome = request.form['nome']
 
@@ -75,7 +77,7 @@ def adicionar_aluno():
 
     email = request.form['email']
 
-    id_curso = request.form['id_curso'] # Pega o valor do select
+    id_curso = request.form['id_curso']
 
     if len(cpf_limpo) != 11:
         # Aqui você poderia usar o sistema de 'flash' do Flask 
@@ -97,13 +99,14 @@ def adicionar_aluno():
     # Volta para a tela inicial
     return redirect('/alunos')
 
-@alunos_bp.route('/excluir-aluno/<int:id>')
-def excluir_aluno(id):
+@alunos_bp.route('/alunos/excluir-aluno/<int:id_aluno>')
+def excluir_aluno(id_aluno):
+
     conn = get_db_connection()
     cursor = conn.cursor()
 
     # Executa o delete usando o ID recebido na URL
-    cursor.execute("DELETE FROM alunos WHERE id_aluno = %s", (id,))
+    cursor.execute("DELETE FROM alunos WHERE id_aluno = %s", (id_aluno,))
 
     conn.commit()
     cursor.close()
@@ -112,12 +115,13 @@ def excluir_aluno(id):
     flash("Aluno excluído com sucesso!")
     return redirect('/alunos')
 
-@alunos_bp.route('/editar-aluno/<int:id>', methods=['GET'])
-def editar_aluno(id):
+@alunos_bp.route('/alunos/editar-aluno/<int:id_aluno>', methods=['GET'])
+def editar_aluno(id_aluno):
+
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
-    cursor.execute("SELECT * FROM alunos WHERE id_aluno = %s", (id,))
+    cursor.execute("SELECT * FROM alunos WHERE id_aluno = %s", (id_aluno,))
     aluno = cursor.fetchone()
 
     cursor.execute("SELECT * FROM cursos")
@@ -125,10 +129,12 @@ def editar_aluno(id):
 
     cursor.close()
     conn.close()
+
     return render_template('editar_aluno.html', aluno=aluno, cursos=cursos)
 
-@alunos_bp.route('/atualizar-aluno/<int:id>', methods=['POST'])
-def atualizar_aluno(id):
+@alunos_bp.route('/alunos/editar-aluno/<int:id_aluno>/atualizar', methods=['POST'])
+def atualizar_aluno(id_aluno):
+
     nome = request.form['nome']
     cpf_form = request.form['cpf']
 
@@ -143,7 +149,7 @@ def atualizar_aluno(id):
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("UPDATE alunos SET nome=%s, cpf=%s, email=%s, dt_nasc=%s, id_curso=%s WHERE id_aluno=%s", 
-                   (nome, cpf_limpo, email, dt_nascimento, id_curso, id))
+                   (nome, cpf_limpo, email, dt_nascimento, id_curso, id_aluno))
     conn.commit()
     cursor.close()
     conn.close()

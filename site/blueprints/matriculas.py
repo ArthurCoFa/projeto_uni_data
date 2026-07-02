@@ -187,3 +187,53 @@ def adicionar_matricula_final(id_aluno, id_turma):
     
     # Volta para a tela inicial
     return redirect('/matriculas')
+
+@matriculas_bp.route('/matriculas/<int:id>/excluir-matricula')
+def excluir_matricula(id):
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Executa o delete usando o ID recebido na URL
+    cursor.execute("DELETE FROM matriculas WHERE id_mat = %s", (id,))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+    
+    flash("Disciplina excluída com sucesso!")
+    return redirect('/matriculas')
+
+@matriculas_bp.route('/matriculas/<int:id_mat>/editar-matricula')
+def editar_matricula(id_mat):
+    
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    cursor.close()
+    conn.close()
+    
+    # Volta para a tela inicial
+    return render_template('editar_matricula.html', id_mat=id_mat)
+
+@matriculas_bp.route('/matriculas/<int:id_mat>/editar-matricula/aluno/turma', methods=['POST'])
+def editar_matricula_final(id_mat):
+    
+    nota = request.form['nota']
+
+    frequencia = request.form['frequencia']
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    # Executa o INSERT
+    cursor.execute("UPDATE matriculas SET nota = %s, frequencia = %s WHERE id_mat = %s", (nota, frequencia, id_mat))
+    
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    flash("Matricula editada com sucesso!")
+    
+    # Volta para a tela inicial
+    return redirect('/matriculas')

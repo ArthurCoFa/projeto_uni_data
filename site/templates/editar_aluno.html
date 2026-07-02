@@ -2,7 +2,7 @@
 
 {% block content %}
     <h3>Atualizar informações do aluno</h3>
-    <form action="/atualizar-aluno/{{ aluno.id_aluno }}" method="POST">
+    <form action="/alunos/editar-aluno/{{ aluno.id_aluno }}/atualizar" method="POST">
 
         <input type="text" name="nome" placeholder="Nome do aluno" value="{{ aluno.nome }}" required>
 

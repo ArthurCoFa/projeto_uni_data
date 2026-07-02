@@ -2,7 +2,7 @@
 
 {% block content %}
     <h3>Adicionar curso</h3>
-    <form action="/adicionar-curso" method="POST">
+    <form action="/cursos/adicionar-curso" method="POST">
         <input type="text" name="nome" placeholder="Nome do curso" required>
 
         <input type="int" name="carga_horaria_total" placeholder="Carga Horária Total" required>
@@ -45,9 +45,9 @@
                     <td>{{ curso.ch_total }}</td>
                     <td>{{ curso.tipo }}</td>
                     <td>
-                        <a href="/editar-curso/{{ curso.id_curso }}" class="btn btn-warning btn-sm">Editar Curso</a>
-                        <a href="/cursos/{{ curso.id_curso }}/editar-disciplinas-curso" class="btn btn-warning btn-sm">Editar Disciplinas</a>
-                        <a href="/excluir-curso/{{ curso.id_curso }}" 
+                        <a href="/cursos/editar-curso/{{ curso.id_curso }}" class="btn btn-warning btn-sm">Editar Curso</a>
+                        <a href="/cursos/editar-disciplinas-curso/{{ curso.id_curso }}" class="btn btn-warning btn-sm">Editar Disciplinas</a>
+                        <a href="/cursos/excluir-curso/{{ curso.id_curso }}" 
                         class="btn btn-danger btn-sm" 
                         onclick="return confirm('Tem certeza que deseja excluir este aluno?')">
                         Excluir

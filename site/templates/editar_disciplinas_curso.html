@@ -3,8 +3,7 @@
 {% block content %}
     <h3>Adicionar disciplina no curso {{ curso.nome }}</h3>
 
-    <form method="POST" action="/cursos/{{ curso.id_curso }}/adicionar-disciplina-curso">
-
+    <form method="POST" action="/cursos/editar-disciplinas-curso/{{ curso.id_curso }}/adicionar-disciplina">
         <select name="disciplina_id" class="form-control" required>
             {% for d in todas_disciplinas %}
                 <option value="{{ d.id_disc }}">{{ d.disciplina }}</option>
@@ -39,10 +38,10 @@
                     </td>
                     <td>
                         <a href="{{ url_for('cursos.alternar_obrigatoriedade_disciplina', 
-                        curso_id=disciplina_curso.id_curso, disc_id=disciplina_curso.id_disc) }}" 
+                        id_curso=disciplina_curso.id_curso, id_disc=disciplina_curso.id_disc) }}" 
                         class="btn btn-warning btn-sm">Alterar Obrigatoriedade</a>
                         <a href="{{ url_for('cursos.excluir_disciplina_curso', 
-                        curso_id=disciplina_curso.id_curso, disc_id=disciplina_curso.id_disc) }}" 
+                        id_curso=disciplina_curso.id_curso, id_disc=disciplina_curso.id_disc) }}" 
                         class="btn btn-danger btn-sm" 
                         onclick="return confirm('Tem certeza que deseja excluir este aluno?')">
                         Excluir Disciplina do Curso

@@ -32,8 +32,8 @@
                 <td>{{ matricula.frequencia }}</td>
                 <td>{{ matricula.situacao }}</td>
                 <td>
-                    <a href="/adicionar-matricula/" class="btn btn-warning btn-sm">Editar</a>
-                    <a href="/excluir-aluno/" 
+                    <a href="/matriculas/{{ matricula.id_mat }}/editar-matricula" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="/matriculas/{{ matricula.id_mat }}/excluir-matricula" 
                     class="btn btn-danger btn-sm" 
                     onclick="return confirm('Tem certeza que deseja excluir este aluno?')">
                     Excluir

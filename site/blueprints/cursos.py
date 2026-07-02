@@ -52,7 +52,7 @@ def pagina_cursos():
     # O segredo é que o render_template precisa enviar essa variável atualizada
     return render_template('cursos.html', busca=busca, cursos=cursos, page=page, total_paginas=total_paginas)
 
-@cursos_bp.route('/adicionar-curso', methods=['POST'])
+@cursos_bp.route('/cursos/adicionar-curso', methods=['POST'])
 def adicionar_curso():
 
     tipos_validos = ['Graduacao', 'Pos-Graduacao']
@@ -81,13 +81,13 @@ def adicionar_curso():
     # Volta para a tela inicial
     return redirect('/cursos')
 
-@cursos_bp.route('/excluir-curso/<int:id>')
-def excluir_curso(id):
+@cursos_bp.route('/cursos/excluir-curso/<int:id_curso>')
+def excluir_curso(id_curso):
     conn = get_db_connection()
     cursor = conn.cursor()
 
     # Executa o delete usando o ID recebido na URL
-    cursor.execute("DELETE FROM cursos WHERE id_curso = %s", (id,))
+    cursor.execute("DELETE FROM cursos WHERE id_curso = %s", (id_curso,))
 
     conn.commit()
     cursor.close()
@@ -96,20 +96,20 @@ def excluir_curso(id):
     flash("Curso excluído com sucesso!")
     return redirect('/cursos')
 
-@cursos_bp.route('/editar-curso/<int:id>', methods=['GET'])
-def editar_curso(id):
+@cursos_bp.route('/cursos/editar-curso/<int:id_curso>', methods=['GET'])
+def editar_curso(id_curso):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
-    cursor.execute("SELECT * FROM cursos WHERE id_curso = %s", (id,))
+    cursor.execute("SELECT * FROM cursos WHERE id_curso = %s", (id_curso,))
     curso = cursor.fetchone()
 
     cursor.close()
     conn.close()
     return render_template('editar_curso.html', curso=curso)
 
-@cursos_bp.route('/atualizar-curso/<int:id>', methods=['POST'])
-def atualizar_curso(id):
+@cursos_bp.route('/cursos/atualizar-curso/<int:id_curso>', methods=['POST'])
+def atualizar_curso(id_curso):
 
     nome = request.form['nome']
     
@@ -120,7 +120,7 @@ def atualizar_curso(id):
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("UPDATE cursos SET nome=%s, ch_total=%s, tipo=%s WHERE id_curso=%s", 
-                   (nome, ch_total, tipo, id))
+                   (nome, ch_total, tipo, id_curso))
     conn.commit()
     cursor.close()
     conn.close()
@@ -128,14 +128,14 @@ def atualizar_curso(id):
     flash("Dados atualizados com sucesso!")
     return redirect('/cursos')
 
-@cursos_bp.route('/cursos/<int:id>/editar-disciplinas-curso', methods=['GET'])
-def editar_disciplinas_curso(id):
+@cursos_bp.route('/cursos/editar-disciplinas-curso/<int:id_curso>', methods=['GET'])
+def editar_disciplinas_curso(id_curso):
 
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
     querry = "SELECT nome, id_curso FROM cursos WHERE id_curso = %s"
-    cursor.execute(querry, (id,))
+    cursor.execute(querry, (id_curso,))
     curso = cursor.fetchone()
 
     querry = "SELECT c.nome AS curso, d.nome AS disciplina, dc.obrigatoria, d.id_disc, c.id_curso " \
@@ -144,7 +144,7 @@ def editar_disciplinas_curso(id):
     "WHERE c.id_curso = %s " \
     "ORDER BY dc.obrigatoria DESC, d.nome ASC "
 
-    cursor.execute(querry, (id,))
+    cursor.execute(querry, (id_curso,))
     disciplinas_curso = cursor.fetchall()
 
     querry = "SELECT d.id_disc, d.nome AS disciplina " \
@@ -153,45 +153,46 @@ def editar_disciplinas_curso(id):
     "FROM curso_disciplina cd " \
     "WHERE cd.id_disc = d.id_disc AND cd.id_curso = %s);"
 
-    cursor.execute(querry, (id,))
+    cursor.execute(querry, (id_curso,))
     todas_disciplinas = cursor.fetchall()
 
     cursor.close()
     conn.close()
-    return render_template('editar_disciplinas_curso.html', disciplinas_curso=disciplinas_curso, curso=curso, todas_disciplinas=todas_disciplinas)
+    return render_template('editar_disciplinas_curso.html', disciplinas_curso=disciplinas_curso, 
+                           curso=curso, todas_disciplinas=todas_disciplinas)
 
-@cursos_bp.route("/curso/<int:curso_id>/editar-obrigatoriedade/<int:disc_id>/alternar")
-def alternar_obrigatoriedade_disciplina(curso_id, disc_id):
+@cursos_bp.route("/curso/editar-disciplinas-curso/<int:id_curso>/editar-obrigatoriedade/<int:id_disc>/alternar")
+def alternar_obrigatoriedade_disciplina(id_curso, id_disc):
 
     conn = get_db_connection()
     cursor = conn.cursor()
 
     cursor.execute("UPDATE curso_disciplina SET obrigatoria = NOT obrigatoria WHERE id_curso = %s AND id_disc = %s", 
-                   (curso_id, disc_id))
+                   (id_curso, id_disc))
     conn.commit()
     cursor.close()
     conn.close()
     
     flash("Dados atualizados com sucesso!")
-    return redirect(url_for('cursos.editar_disciplinas_curso', id=curso_id))
+    return redirect(url_for('cursos.editar_disciplinas_curso', id_curso=id_curso))
 
-@cursos_bp.route("/curso/<int:curso_id>/editar-obrigatoriedade/<int:disc_id>/excluir")
-def excluir_disciplina_curso(curso_id, disc_id):
+@cursos_bp.route("/curso/editar-disciplinas-curso/<int:id_curso>/disciplina/<int:id_disc>/excluir")
+def excluir_disciplina_curso(id_curso, id_disc):
 
     conn = get_db_connection()
     cursor = conn.cursor()
 
     cursor.execute("DELETE FROM curso_disciplina WHERE id_curso = %s AND id_disc = %s", 
-                   (curso_id, disc_id))
+                   (id_curso, id_disc))
     conn.commit()
     cursor.close()
     conn.close()
     
     flash("Dados atualizados com sucesso!")
-    return redirect(url_for('cursos.editar_disciplinas_curso', id=curso_id))
+    return redirect(url_for('cursos.editar_disciplinas_curso', id_curso=id_curso))
 
-@cursos_bp.route("/cursos/<int:curso_id>/adicionar-disciplina-curso", methods=['POST'])
-def adicionar_disciplina_curso(curso_id):
+@cursos_bp.route("/cursos/editar-disciplinas-curso/<int:id_curso>/adicionar-disciplina/", methods=['POST'])
+def adicionar_disciplina_curso(id_curso):
 
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -202,11 +203,11 @@ def adicionar_disciplina_curso(curso_id):
     querry = "INSERT INTO curso_disciplina (id_curso, id_disc, obrigatoria) " \
     "VALUES (%s, %s, %s)"
     
-    cursor.execute(querry, (curso_id, disciplina_id, obrigatoria))
+    cursor.execute(querry, (id_curso, disciplina_id, obrigatoria))
 
     conn.commit()
     cursor.close()
     conn.close()
     
     flash("Disciplina adicionada com sucesso!")
-    return redirect(url_for('cursos.editar_disciplinas_curso', id=curso_id))
+    return redirect(url_for('cursos.editar_disciplinas_curso', id_curso=id_curso))
