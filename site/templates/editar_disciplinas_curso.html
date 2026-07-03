@@ -3,18 +3,16 @@
 {% block content %}
     <h3>Adicionar disciplina no curso {{ curso.nome }}</h3>
 
-    <form method="POST" action="/cursos/editar-disciplinas-curso/{{ curso.id_curso }}/adicionar-disciplina">
-        <select name="disciplina_id" class="form-control" required>
-            {% for d in todas_disciplinas %}
-                <option value="{{ d.id_disc }}">{{ d.disciplina }}</option>
-            {% endfor %}
-        </select>
-        
-        <label>
-            <input type="checkbox" name="obrigatoria" value="1"> Disciplina Obrigatória?
-        </label>
-        
-        <button type="submit" class="btn btn-primary">Adicionar</button>
+    <a href="/cursos/editar-disciplinas-curso/{{ curso.id_curso }}/adicionar-disciplina/" 
+        class="btn btn-primary btn-sm">Adicionar</a>
+
+    <h3>Pesquisar Disciplina</h3>
+
+    <form action="/cursos/editar-disciplinas-curso/{{ curso.id_curso }}" method="GET" class="d-flex mb-3">
+        <input type="text" name="busca" class="form-control me-2" 
+            placeholder="Pesquisar por nome ou ID... (Deixe em branco para listar todos)" value="{{ busca }}">
+        <button type="submit" class="btn btn-primary">Buscar</button>
+        <a href="/cursos/editar-disciplinas-curso/{{ curso.id_curso }}" class="btn btn-secondary ms-2">Limpar</a>
     </form>
 
     <h1>Lista de disciplina do curso {{ curso.nome }} </h1>
@@ -51,4 +49,20 @@
                 {% endfor %}
             </tbody>
         </table>
+        <nav>
+            <ul class="pagination">
+                <li class="page-item {% if page <= 1 %}disabled{% endif %}">
+                    <a class="page-link" href="/cursos/editar-disciplinas-curso/{{ curso.id_curso }}?page={{ 1 }}&busca={{ busca }}">Primeira Página</a>
+                </li>
+                <li class="page-item {% if page <= 1 %}disabled{% endif %}">
+                    <a class="page-link" href="/cursos/editar-disciplinas-curso/{{ curso.id_curso }}?page={{ page - 1 }}&busca={{ busca }}">Anterior</a>
+                </li>
+                <li class="page-item {% if page >= total_paginas %}disabled{% endif %}">
+                    <a class="page-link" href="/cursos/editar-disciplinas-curso/{{ curso.id_curso }}?page={{ page + 1 }}&busca={{ busca }}">Próximo</a>
+                </li>
+                <li class="page-item {% if page >= total_paginas %}disabled{% endif %}">
+                    <a class="page-link" href="/cursos/editar-disciplinas-curso/{{ curso.id_curso }}?page={{ total_paginas }}&busca={{ busca }}">Última página</a>
+                </li>
+            </ul>
+        </nav>
 {% endblock %}

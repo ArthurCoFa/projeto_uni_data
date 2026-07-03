@@ -134,32 +134,68 @@ def editar_disciplinas_curso(id_curso):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
+    busca = request.args.get('busca', '')
+
+    page = request.args.get('page', 1)  # Pega a página, padrão é 1
+
+    page = int(page)
+
+    if busca:
+        if busca.isdigit():
+            total_registros = contar_registros('disciplinas', busca=busca, campo_busca="id_disc")
+        else:
+            total_registros = contar_registros('disciplinas', busca=busca, campo_busca="nome")
+    else:
+        total_registros = contar_registros('curso_disciplina', busca=id_curso, campo_busca="id_curso")
+
+    total_paginas = ceil(total_registros / PER_PAGE) if total_registros > 0 else 1
+
+    if page < 1: 
+        page = 1
+        flash("Você foi redirecionado para a primeira página disponível.")
+        return redirect(url_for('cursos.editar_disciplinas_curso', page=1, busca=busca, id_curso=id_curso))
+    elif page > total_paginas: 
+        page = total_paginas
+        flash("Você foi redirecionado para a última página disponível.")
+        return redirect(url_for('cursos.editar_disciplinas_curso', page=total_paginas, busca=busca, id_curso=id_curso))
+
+    offset = (page - 1) * PER_PAGE
+
     querry = "SELECT nome, id_curso FROM cursos WHERE id_curso = %s"
     cursor.execute(querry, (id_curso,))
     curso = cursor.fetchone()
 
-    querry = "SELECT c.nome AS curso, d.nome AS disciplina, dc.obrigatoria, d.id_disc, c.id_curso " \
-    "FROM disciplinas d JOIN curso_disciplina dc ON d.id_disc = dc.id_disc " \
-    "JOIN cursos c ON c.id_curso = dc.id_curso " \
-    "WHERE c.id_curso = %s " \
-    "ORDER BY dc.obrigatoria DESC, d.nome ASC "
+    if busca:
+        if busca.isdigit():
+            querry = "SELECT c.nome AS curso, d.nome AS disciplina, dc.obrigatoria, d.id_disc, c.id_curso " \
+            "FROM disciplinas d JOIN curso_disciplina dc ON d.id_disc = dc.id_disc " \
+            "JOIN cursos c ON c.id_curso = dc.id_curso " \
+            "WHERE d.id_disc LIKE %s AND dc.id_curso = %s " \
+            "ORDER BY dc.obrigatoria DESC, d.nome ASC "
+            cursor.execute(querry, (busca, id_curso))
+        else:
+            querry = "SELECT c.nome AS curso, d.nome AS disciplina, dc.obrigatoria, d.id_disc, c.id_curso " \
+            "FROM disciplinas d JOIN curso_disciplina dc ON d.id_disc = dc.id_disc " \
+            "JOIN cursos c ON c.id_curso = dc.id_curso " \
+            "WHERE d.nome LIKE %s AND dc.id_curso = %s " \
+            "ORDER BY dc.obrigatoria DESC, d.nome ASC " \
+            "LIMIT %s OFFSET %s"
+            cursor.execute(querry, ('%' + busca + '%', id_curso, PER_PAGE, offset))
+    else:
+        querry = "SELECT c.nome AS curso, d.nome AS disciplina, dc.obrigatoria, d.id_disc, c.id_curso " \
+        "FROM disciplinas d JOIN curso_disciplina dc ON d.id_disc = dc.id_disc " \
+        "JOIN cursos c ON c.id_curso = dc.id_curso " \
+        "WHERE c.id_curso = %s " \
+        "ORDER BY dc.obrigatoria DESC, d.nome ASC " \
+        "LIMIT %s OFFSET %s"
+        cursor.execute(querry, (id_curso, PER_PAGE, offset))
 
-    cursor.execute(querry, (id_curso,))
     disciplinas_curso = cursor.fetchall()
-
-    querry = "SELECT d.id_disc, d.nome AS disciplina " \
-    "FROM disciplinas d " \
-    "WHERE NOT EXISTS (SELECT 1 " \
-    "FROM curso_disciplina cd " \
-    "WHERE cd.id_disc = d.id_disc AND cd.id_curso = %s);"
-
-    cursor.execute(querry, (id_curso,))
-    todas_disciplinas = cursor.fetchall()
 
     cursor.close()
     conn.close()
     return render_template('editar_disciplinas_curso.html', disciplinas_curso=disciplinas_curso, 
-                           curso=curso, todas_disciplinas=todas_disciplinas)
+                           curso=curso, page=page, total_paginas=total_paginas)
 
 @cursos_bp.route("/curso/editar-disciplinas-curso/<int:id_curso>/editar-obrigatoriedade/<int:id_disc>/alternar")
 def alternar_obrigatoriedade_disciplina(id_curso, id_disc):
@@ -191,23 +227,116 @@ def excluir_disciplina_curso(id_curso, id_disc):
     flash("Dados atualizados com sucesso!")
     return redirect(url_for('cursos.editar_disciplinas_curso', id_curso=id_curso))
 
-@cursos_bp.route("/cursos/editar-disciplinas-curso/<int:id_curso>/adicionar-disciplina/", methods=['POST'])
-def adicionar_disciplina_curso(id_curso):
+@cursos_bp.route("/cursos/editar-disciplinas-curso/<int:id_curso>/adicionar-disciplina/")
+def pagina_adicionar_disciplina_curso(id_curso):
 
     conn = get_db_connection()
-    cursor = conn.cursor()
+    cursor = conn.cursor(dictionary=True)
 
-    disciplina_id = request.form.get('disciplina_id')
-    obrigatoria = 1 if request.form.get('obrigatoria') else 0
+    busca = request.args.get('busca', '')
+
+    page = request.args.get('page', 1)  # Pega a página, padrão é 1
+
+    page = int(page)
+
+    if busca:
+        if busca.isdigit():
+            querry = "SELECT COUNT(*) AS total " \
+            "FROM disciplinas d " \
+            "WHERE NOT EXISTS (SELECT 1 " \
+            "FROM curso_disciplina cd " \
+            "WHERE cd.id_disc = d.id_disc AND cd.id_curso = %s)" \
+            "AND d.id_disc = %s;"
+            cursor.execute(querry, (id_curso, busca))
+            resultado = cursor.fetchone()
+            total_registros = resultado['total']
+        else: 
+            querry = "SELECT COUNT(*) AS total " \
+            "FROM disciplinas d " \
+            "WHERE NOT EXISTS (SELECT 1 " \
+            "FROM curso_disciplina cd " \
+            "WHERE cd.id_disc = d.id_disc AND cd.id_curso = %s) " \
+            "AND d.nome LIKE %s;"
+            cursor.execute(querry, (id_curso, busca,))
+            resultado = cursor.fetchone()
+            total_registros = resultado['total']
+    else:
+        querry = "SELECT COUNT(*) AS total " \
+        "FROM disciplinas d " \
+        "WHERE NOT EXISTS (SELECT 1 " \
+        "FROM curso_disciplina cd " \
+        "WHERE cd.id_disc = d.id_disc AND cd.id_curso = %s);"
+        cursor.execute(querry, (id_curso,))
+        resultado = cursor.fetchone()
+        total_registros = resultado['total']
+
+    total_paginas = ceil(total_registros / PER_PAGE) if total_registros > 0 else 1
+
+    if page < 1: 
+        flash("Você foi redirecionado para a primeira página disponível.")
+        return redirect(url_for('cursos.pagina_adicionar_disciplina_curso', page=1, busca=busca, id_curso=id_curso))
+    elif page > total_paginas: 
+        flash("Você foi redirecionado para a última página disponível.")
+        return redirect(url_for('cursos.pagina_adicionar_disciplina_curso', page=total_paginas, busca=busca, id_curso=id_curso))
+
+    offset = (page - 1) * PER_PAGE
+
+    querry = "SELECT nome, id_curso FROM cursos WHERE id_curso = %s"
+    cursor.execute(querry, (id_curso,))
+    curso = cursor.fetchone()
+
+    if busca:
+        if busca.isdigit():    
+            querry = "SELECT d.id_disc, d.nome AS disciplina " \
+            "FROM disciplinas d " \
+            "WHERE NOT EXISTS (SELECT 1 " \
+            "FROM curso_disciplina cd " \
+            "WHERE cd.id_disc = d.id_disc AND cd.id_curso = %s) " \
+            "AND d.id_disc = %s" \
+            "LIMIT %s OFFSET %s;"
+            cursor.execute(querry, (id_curso, busca, PER_PAGE, offset))
+        else:
+            querry = "SELECT d.id_disc, d.nome AS disciplina " \
+            "FROM disciplinas d " \
+            "WHERE NOT EXISTS (SELECT 1 " \
+            "FROM curso_disciplina cd " \
+            "WHERE cd.id_disc = d.id_disc AND cd.id_curso = %s) " \
+            "AND d.nome LIKE %s " \
+            "LIMIT %s OFFSET %s;"
+            cursor.execute(querry, (id_curso, '%' + busca + '%', PER_PAGE, offset))
+    else:
+        querry = "SELECT d.id_disc, d.nome AS disciplina " \
+        "FROM disciplinas d " \
+        "WHERE NOT EXISTS (SELECT 1 " \
+        "FROM curso_disciplina cd " \
+        "WHERE cd.id_disc = d.id_disc AND cd.id_curso = %s) " \
+        "LIMIT %s OFFSET %s;"
+        cursor.execute(querry, (id_curso, PER_PAGE, offset))
     
-    querry = "INSERT INTO curso_disciplina (id_curso, id_disc, obrigatoria) " \
-    "VALUES (%s, %s, %s)"
-    
-    cursor.execute(querry, (id_curso, disciplina_id, obrigatoria))
+    disciplinas_adicionaveis = cursor.fetchall()
 
     conn.commit()
     cursor.close()
     conn.close()
+
+    return render_template('adicionar_disciplinas_curso.html', disciplinas_adicionaveis=disciplinas_adicionaveis,
+                                                               page=page, total_paginas=total_paginas, curso=curso)
+
+@cursos_bp.route("/cursos/editar-disciplinas-curso/<int:id_curso>/adicionar-disciplina/<int:id_disc>", methods=['POST'])
+def adicionar_disciplina_curso(id_curso, id_disc):
     
-    flash("Disciplina adicionada com sucesso!")
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    obrigatoria = request.form['obrigatoria']
+    
+    querry = "INSERT INTO curso_disciplina (id_curso, id_disc, obrigatoria) " \
+    "VALUES (%s, %s, %s)"
+    
+    cursor.execute(querry, (id_curso, id_disc, obrigatoria))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
     return redirect(url_for('cursos.editar_disciplinas_curso', id_curso=id_curso))
