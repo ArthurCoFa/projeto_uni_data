@@ -339,4 +339,6 @@ def adicionar_disciplina_curso(id_curso, id_disc):
     cursor.close()
     conn.close()
 
+    flash("Disciplina adicionada com sucesso.")
+
     return redirect(url_for('cursos.editar_disciplinas_curso', id_curso=id_curso))

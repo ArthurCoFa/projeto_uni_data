@@ -22,12 +22,17 @@
                 {% endfor %}
             </select>
 
+        </br>
+
         <label for="titulacao">Titulacao:</label>
         <select name="titulacao" id="titulacao" required>
-            <option value="" disabled selected>Selecione uma titulação</option>
-            <option value="Mestre">Mestre</option>
-            <option value="Doutor">Doutor</option>
-            <option value="Pos-doutor">Pos-doutor</option>
+            <option value="" disabled>Selecione uma titulação</option>
+            <option value="Mestre" {% if professor.titulacao == "Mestre" %}selected{% endif %}>
+                Mestre</option>
+            <option value="Doutor" {% if professor.titulacao == "Doutor" %}selected{% endif %}>
+                Doutor</option>
+            <option value="Pos-doutor" {% if professor.titulo == "Pos-doutor" %}selected{% endif %}>
+                Pos-doutor</option>
         </select>
         
         <button type="submit" class="btn btn-primary">Salvar Alterações</button>

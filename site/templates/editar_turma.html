@@ -7,22 +7,24 @@
         <label for="id_disciplina">Disciplina:</label>
             <select name="id_disc" id="id_disc" required>
                 {% for disciplina in disciplinas %}
-                    <option value="{{ disciplina.id_disc }}">{{ disciplina.nome }}</option>
+                    <option value="{{ disciplina.id_disc }}" {% if disciplina.id_disc == turma.id_disc %}selected{% endif %}>
+                        {{ disciplina.nome }}</option>
                 {% endfor %}
             </select>
 
-        <label for="id_prof">Disciplina:</label>
+        <label for="id_prof">Professor:</label>
             <select name="id_prof" id="id_prof" required>
                 {% for professor in professores %}
-                    <option value="{{ professor.id_prof }}">{{ professor.nome }}</option>
+                    <option value="{{ professor.id_prof }}" {% if professor.id_prof == turma.id_prof %}selected{% endif %}> 
+                        {{ professor.nome }}</option>
                 {% endfor %}
             </select>
 
-        <input type="int" name="semestre" placeholder="semestre" required>
+        <input type="int" name="semestre" placeholder="semestre" value="{{ turma.semestre }}" required>
 
-        <input type="int" name="ano" placeholder="ano" required>
+        <input type="int" name="ano" placeholder="ano" value="{{ turma.ano }}" required>
 
-        <input type="int" name="capacidade" placeholder="capacidade" required>
+        <input type="int" name="capacidade" placeholder="capacidade" value="{{ turma.capacidade }}"required>
 
         <button type="submit">Atualizar turma</button>
     </form>

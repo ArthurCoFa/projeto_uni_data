@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<h3>Atualizar informações do aluno</h3>
+<h3>Atualizar informações do Curso</h3>
     <form action="/cursos/atualizar-curso/{{ curso.id_curso }}" method="POST">
 
         <input type="text" name="nome" placeholder="Nome do curso" value="{{ curso.nome }}" required>
@@ -11,8 +11,8 @@
         <label for="tipo">Tipo:</label>
         <select name="tipo" id="tipo" required>
             <option value="" disabled selected>Selecione um tipo</option>
-            <option value="Graduacao">Graduação</option>
-            <option value="Pos-Graduacao">Pós-Graduação</option>
+            <option value="Graduacao" {% if curso.tipo == "Graduacao" %}selected{% endif %}>Graduação</option>
+            <option value="Pos-Graduacao" {% if curso.tipo == "Pos-Graduacao" %}selected{% endif %}>Pós-Graduação</option>
         </select>
         
         <button type="submit" class="btn btn-primary">Salvar Alterações</button>

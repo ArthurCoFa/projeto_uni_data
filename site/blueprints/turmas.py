@@ -13,21 +13,23 @@ def pagina_turmas():
 
     page = int(request.args.get('page', 1))  # Pega a página, padrão é 1
 
-    if busca.isdigit():
-        total_registros = contar_registros(TABELA, busca=busca, campo_busca='id_turma')
+    if busca:
+        if busca.isdigit():
+            total_registros = contar_registros(TABELA, busca=busca, campo_busca='id_turma')
+        else:
+            total_registros = contar_registros('disciplinas', busca=busca)
     else:
-        total_registros = contar_registros('disciplinas', busca=busca)
+        total_registros = contar_registros(TABELA, busca=busca)
 
     total_paginas = ceil(total_registros / PER_PAGE) if total_registros > 0 else 1
 
     if page < 1: 
         flash("Você foi redirecionado para a primeira página disponível.")
-        return redirect(url_for('disciplinas.pagina_disciplinas', page=1, busca=busca))
+        return redirect(url_for('turmas.pagina_turmas', page=1, busca=busca))
     elif page > total_paginas: 
         flash("Você foi redirecionado para a última página disponível.")
-        return redirect(url_for('disciplinas.pagina_disciplinas', page=total_paginas, busca=busca))
+        return redirect(url_for('turmas.pagina_turmas', page=total_paginas, busca=busca))
         
-
     offset = (page - 1) * PER_PAGE          # Cálculo do pulo
 
     conn = get_db_connection()

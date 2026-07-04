@@ -23,7 +23,6 @@ def pagina_disciplinas():
     elif page > total_paginas: 
         flash("Você foi redirecionado para a última página disponível.")
         return redirect(url_for('disciplinas.pagina_disciplinas', page=total_paginas, busca=busca))
-        
 
     offset = (page - 1) * PER_PAGE          # Cálculo do pulo
 

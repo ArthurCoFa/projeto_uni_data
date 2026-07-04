@@ -11,21 +11,24 @@
                 {% endfor %}
             </select>
 
-        <label for="id_prof">Disciplina:</label>
+        <label for="id_prof">Professor:</label>
             <select name="id_prof" id="id_prof" required>
+                <option value="" disabled selected>Selecione um professor</option>
                 {% for professor in professores %}
                     <option value="{{ professor.id_prof }}">{{ professor.nome }}</option>
                 {% endfor %}
             </select>
 
-        <input type="int" name="semestre" placeholder="semestre" required>
+        <input type="int" name="semestre" placeholder="Semestre" required>
 
-        <input type="int" name="ano" placeholder="ano" required>
+        <input type="int" name="ano" placeholder="Ano" required>
 
-        <input type="int" name="capacidade" placeholder="capacidade" required>
+        <input type="int" name="capacidade" placeholder="Capacidade" required>
 
-        <button type="submit">Cadastrar curso</button>
+        <button type="submit">Cadastrar Turma</button>
     </form>
+
+    <h3>Pesquisar Turmas:</h3>
 
 <form action="/turmas" method="GET" class="d-flex mb-3">
         <input type="text" name="busca" class="form-control me-2" 
@@ -34,7 +37,7 @@
         <a href="/turmas" class="btn btn-secondary ms-2">Limpar</a>
     </form>
 
-<h1>Lista de cursos</h1>
+<h1>Lista de Turmas</h1>
     <table class="table table-striped table-hover border">
         <thead class="table-dark">
             <tr>

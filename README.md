@@ -1,35 +1,51 @@
-# Projeto de Banco de Dados para uma Universidade
+# Projeto de site para uma Universidade
 
-Este projeto é uma implementação de um sistema de Banco de Dados para uma universidade fictícia no MYSQL para a matéria de Banco de Dados 2.
-Feito pelos alunos:
-- Arthur da Costa Farias
-- Gabriel Santin Alves Saab
+## IMPORTANTE ANTES DE LER!!!
+## Esta é uma continuação da branch "main", por isso é necessário seguir os passos dela para configuração correta dos arquivos do Banco de Dados.
+
+Essa branch "feature-site-python" é uma extensão da branch "main" e tem como objetivo a implementação de um Backend em Python(Flask) para o Sistema de Gestão Acadêmica, conectando o usuário ao Banco de Dados permitindo operações de CRUD.
 
 ---
 
 ## Funcionalidades
-* Consultas: Pesquisas nas tabelas com consultas complexas utlizando JOINs, GROUP BY, HAVING e subconsultas com NOT EXISTS.
-* Transações: Controle de transações para matrícula e lançamento de notas, garantindo atomicidade através de COMMITs e ROLLBACKs.
-* Automação: O uso de Triggers permite a atualização automática da situação acadêmica do aluno.
+* Gestão: Cadastro e edição completo de alunos, disciplinas, professores, turmas e matrículas.
+* Busca Inteligente: Sistema de Pesquisa para listas grandes.
+* Paginação: Lista organizada para garantir performance e boa usabilidade.
 
 ---
 
 ## Pré-Requisitos
 Para executar esse programa, certifique-se que tenha instalado:
+* Python.
 * MySQL Server (8.0+).
-* MySQL Workbench (ou software de preferência).
+* Bibliotecas flask e math.
 
 ---
 
 ## Como Usar
-Para configurar e executar o projeto, siga a ordem de importação/execução dos arquivos abaixo em seu SGBD: </br>
-1 - **`01_ddl.sql`**: Define a estrutura das tabelas e relacionamentos. </br>
-2 - **`02_dml.sql`**: Popula o banco com dados de teste. </br>
-3 - **`03_view.sql`**: Cria a view necessárias para uma das consultas (queries). </br> 
-4 - **`04_trigger.sql`**: Instala as automações (triggers) do sistema. </br> 
-5 - **`05_queries.sql`**: Contém as consultas de relatório solicitadas. </br>
-6 - **`06_transacoes.sql`**: Scripts das transações (ACID) demonstrando controle de matrículas. </br>
-7 - **`07_evidencias.pdf`**: Arquivo contendo os prints de comprovação de execução e testes. </br>
-8 - **`08_diagrama_er.pdf`**: Modelo Entidade-Relacionamento do banco de dados. </br>
 
->**NOTA**: É necessário rodar os arquivos de 1 a 4 na ordem correta, pois isso garante que todas as dependências (tabelas, views, triggers) existam antes da execução das queries e transações.
+### 1. Clonar o repositório ou baixar o zip
+- Caso queira clonar, abra o "git bash" com o botão direito na pasta ou espaço desejado no seu computador e escreva e execute cada linha separadamente: 
+
+        git clone https://github.com/ArthurCoFa/projeto_uni_data.git
+
+        cd projeto_uni_data
+
+        git checkout feature-site-python
+
+- Caso deseje baixar o zip, no repositório e na branch "feature-site-python" clique no botão verde escrito "Code" e clique na opção "Download ZIP" e baixe para o local desejado. 
+
+### 2. Configuração do Banco de Dados
+>**NOTA**: É necessário ter executado os arquivos do Banco através dos passos na branch "main", porém caso não tenha feito isso é possível configurar com os arquivos na pasta "SQL" na executando eles em ordem númerica.
+
+Com o banco configurado abra o arquivo "db.py" e modifique os dados de configuração do Banco de acordo com o sua configuração (provavelmente a única mudança será a senha do seu banco, pois o usuário e o database serão iguais).
+
+        return mysql.connector.connect{
+        'host': 'localhost',
+        'user': 'seu_usuario',
+        'password': 'sua_senha',
+        'database': 'nome_do_seu_banco'
+        }
+
+### 3. Execução
+Com os passos anteriores realizados execute o arquivo "app.py" no local desejado (terminal ou IDE de preferência) e abra o link http://127.0.0.1:5000/ no navegador para acessar o sistema.

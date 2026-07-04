@@ -14,10 +14,9 @@
         
         <label for="curso">Curso:</label>
             <select name="id_curso" id="curso" required>
-                {% for c in cursos %}
-                    <option value="{{ c['id_curso'] }}" 
-                        {% if c['id_curso'] == aluno['id_curso'] %} selected {% endif %}>
-                        {{ c['nome'] }}
+                {% for curso in cursos %}
+                    <option value="{{ curso.id_curso }}" {% if curso.id_curso == aluno.id_curso %}selected{% endif %}>
+                        {{ curso.nome }}
                     </option>
                 {% endfor %}
             </select>

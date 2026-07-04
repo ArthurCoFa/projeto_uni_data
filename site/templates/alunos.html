@@ -12,6 +12,7 @@
 
         <label for="curso">Curso:</label>
             <select name="id_curso" id="curso" required>
+                <option value="" disabled selected>Selecione um curso</option>
                 {% for curso in cursos %}
                     <option value="{{ curso.id_curso }}">{{ curso.nome }}</option>
                 {% endfor %}
@@ -39,9 +40,9 @@
                 <th>ID</th>
                 <th>Nome</th>
                 <th>CPF</th>
-                <th>email</th>
-                <th>data de nascimento</th>
-                <th>curso</th>
+                <th>Email</th>
+                <th>Data de nascimento</th>
+                <th>Curso</th>
                 <th>Ações</th>
             </tr>
         </thead>

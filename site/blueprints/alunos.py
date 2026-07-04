@@ -35,11 +35,10 @@ def pagina_alunos():
 
     if busca:
         if busca.isdigit():
-            # Busca por ID
             querry = "SELECT a.*, c.nome AS curso FROM alunos a JOIN cursos c ON a.id_curso = c.id_curso WHERE a.id_aluno = %s"
             cursor.execute(querry, (busca,))
         else:
-            # Busca por Nome
+
             querry = "SELECT a.*, c.nome AS curso " \
             "FROM alunos a JOIN cursos c ON a.id_curso = c.id_curso " \
             "WHERE a.nome LIKE %s ORDER BY a.id_aluno " \
@@ -52,7 +51,7 @@ def pagina_alunos():
         "LIMIT %s OFFSET %s"
         cursor.execute(querry, (PER_PAGE, offset))
 
-    alunos = cursor.fetchall() # A variável 'alunos' é atualizada aqui!
+    alunos = cursor.fetchall()
 
     cursor.close()
     conn.close()
@@ -75,14 +74,12 @@ def adicionar_aluno():
 
     cpf_limpo = "".join(filter(str.isdigit, cpf_form))
 
+    if len(cpf_limpo) != 11:
+        return "Erro: CPF inválido! Deve conter 11 números.", 400
+
     email = request.form['email']
 
     id_curso = request.form['id_curso']
-
-    if len(cpf_limpo) != 11:
-        # Aqui você poderia usar o sistema de 'flash' do Flask 
-        # para mostrar uma mensagem de erro na tela
-        return "Erro: CPF inválido! Deve conter 11 números.", 400
     
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -90,6 +87,7 @@ def adicionar_aluno():
     # Executa o INSERT
     cursor.execute("INSERT INTO alunos (nome, dt_nasc, cpf, email, id_curso) VALUES (%s, %s, %s, %s, %s)", 
                    (nome, nascimento, cpf_limpo, email, id_curso))
+    
     conn.commit()
     cursor.close()
     conn.close()
@@ -150,6 +148,7 @@ def atualizar_aluno(id_aluno):
     cursor = conn.cursor()
     cursor.execute("UPDATE alunos SET nome=%s, cpf=%s, email=%s, dt_nasc=%s, id_curso=%s WHERE id_aluno=%s", 
                    (nome, cpf_limpo, email, dt_nascimento, id_curso, id_aluno))
+    
     conn.commit()
     cursor.close()
     conn.close()

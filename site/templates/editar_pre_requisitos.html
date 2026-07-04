@@ -4,14 +4,14 @@
     <h3>Adicionar Pré-Requisito</h3>
     <form action="/disciplinas/{{ disciplina.id_disc }}/adicionar-pre-requisito" method="POST">
 
-        <label for="pre-requisito">Coordenador do curso:</label>
+        <label for="pre-requisito">Pré-requisito:</label>
             <select name="pre-requisito" id="pre-requisito" required>
                 {% for di in disciplinas %}
                     <option value="{{ di.id_disc }}">{{ di.nome }}</option>
                 {% endfor %}
             </select>
 
-        <button type="submit">Cadastrar pre_requisitos</button>
+        <button type="submit">Cadastrar pré-requisito</button>
     </form>
 
     <h1>Lista de Pré-Requisitos da Disciplina {{ disciplina.nome }}</h1>
