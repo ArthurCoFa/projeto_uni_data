@@ -1,29 +1,39 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <h3>Adicionar Disciplina</h3>
-    <form action="/adicionar-disciplina" method="POST">
-        <input type="text" name="nome" placeholder="Nome da disciplina" required>
+    <details>
+        <summary>Adicionar nova Disciplina</summary>
 
-        <input type="int" name="carga_horaria" placeholder="Carga Horária" required>
+        <br>
 
-        <input type="int" name="creditos" placeholder="Créditos da disciplina" required>
+        <form action="/disciplinas/adicionar-disciplina" method="POST">
+            <input type="text" name="nome" placeholder="Nome da disciplina" required>
 
-        <input type="text" name="ementa" placeholder="Ementa">
+            <input type="int" name="carga_horaria" placeholder="Carga Horária" required>
 
-        <button type="submit">Cadastrar curso</button>
-    </form>
+            <input type="int" name="creditos" placeholder="Créditos da disciplina" required>
 
-    <h3>Pesquisar Disciplina:</h3>
+            <input type="text" name="ementa" placeholder="Ementa">
 
-    <form action="/disciplinas" method="GET" class="d-flex mb-3">
-        <input type="text" name="busca" class="form-control me-2" 
-            placeholder="Pesquisar por nome ou ID... (Deixe em branco para listar todos)" value="{{ busca }}">
-        <button type="submit" class="btn btn-primary">Buscar</button>
-        <a href="/disciplinas" class="btn btn-secondary ms-2">Limpar</a>
-    </form>
+            <button type="submit" class="btn btn-primary btn-sm">Cadastrar curso</button>
+        </form>
+    </details>
 
-    <h1>Lista de Disciplinas</h1>
+    <br>
+
+    <details open>
+        <summary>Pesquisar Disciplinas</summary>
+
+        <br>
+
+        <form action="/disciplinas" method="GET" class="d-flex mb-3">
+            <input type="text" name="busca" class="form-control me-2" 
+                placeholder="Pesquisar por nome ou ID... (Deixe em branco para listar todos)" value="{{ busca }}">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+            <a href="/disciplinas" class="btn btn-secondary ms-2">Limpar</a>
+        </form>
+
+        <h1>Lista de Disciplinas</h1>
         <table class="table table-striped table-hover border">
             <thead class="table-dark">
                 <tr>
@@ -34,19 +44,21 @@
                     <th>Ementa</th>
                     <th>Ações</th>
                 </tr>
-            </thead>
-            <tbody>
-                {% for disciplina in disciplinas %}
-                <tr>
+                </thead>
+                <tbody>
+                    {% for disciplina in disciplinas %}
+                    <tr>
                     <td>{{ disciplina.id_disc }}</td>
                     <td>{{ disciplina.nome }}</td>
                     <td>{{ disciplina.ch }}</td>
                     <td>{{ disciplina.creditos }}</td>
                     <td>{{ disciplina.ementa }}</td>
                     <td>
-                        <a href="/editar-disciplina/{{ disciplina.id_disc }}" class="btn btn-warning btn-sm">Editar disciplina</a>
-                        <a href="/disciplinas/{{ disciplina.id_disc }}/editar-pre-requisitos" class="btn btn-warning btn-sm">Editar pré-requisitos</a>
-                        <a href="/excluir-disciplina/{{ disciplina.id_disc }}" 
+                        <a href="/disciplinas/editar-disciplina/{{ disciplina.id_disc }}" 
+                        class="btn btn-warning btn-sm">Editar disciplina</a>
+                        <a href="/disciplinas/editar-disciplina/{{ disciplina.id_disc }}/editar-pre-requisitos" 
+                        class="btn btn-warning btn-sm">Editar pré-requisitos</a>
+                        <a href="/disciplinas/excluir-disciplina/{{ disciplina.id_disc }}" 
                         class="btn btn-danger btn-sm" 
                         onclick="return confirm('Tem certeza que deseja excluir este aluno?')">
                         Excluir
@@ -59,17 +71,22 @@
         <nav>
             <ul class="pagination">
                 <li class="page-item {% if page <= 1 %}disabled{% endif %}">
-                    <a class="page-link" href="/disciplinas?page={{ 1 }}&busca={{ busca }}">Primeira Página</a>
+                    <a class="page-link" href="/disciplinas?page={{ 1 }}&busca={{ busca }}">
+                        Primeira Página</a>
                 </li>
                 <li class="page-item {% if page <= 1 %}disabled{% endif %}">
-                    <a class="page-link" href="/disciplinas?page={{ page - 1 }}&busca={{ busca }}">Anterior</a>
+                    <a class="page-link" href="/disciplinas?page={{ page - 1 }}&busca={{ busca }}">
+                        Anterior</a>
                 </li>
                 <li class="page-item {% if page >= total_paginas %}disabled{% endif %}">
-                    <a class="page-link" href="/disciplinas?page={{ page + 1 }}&busca={{ busca }}">Próximo</a>
+                    <a class="page-link" href="/disciplinas?page={{ page + 1 }}&busca={{ busca }}">
+                        Próximo</a>
                 </li>
                 <li class="page-item {% if page >= total_paginas %}disabled{% endif %}">
-                    <a class="page-link" href="/disciplinas?page={{ total_paginas }}&busca={{ busca }}">Última página</a>
+                    <a class="page-link" href="/disciplinas?page={{ total_paginas }}&busca={{ busca }}">
+                        Última página</a>
                 </li>
             </ul>
         </nav>
+    </details>
 {% endblock %}

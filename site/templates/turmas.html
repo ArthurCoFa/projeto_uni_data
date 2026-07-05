@@ -1,90 +1,102 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<h3>Adicionar turma</h3>
-    <form action="/adicionar-turma" method="POST">
 
-        <label for="id_disciplina">Disciplina:</label>
-            <select name="id_disc" id="id_disc" required>
-                {% for disciplina in disciplinas %}
-                    <option value="{{ disciplina.id_disc }}">{{ disciplina.nome }}</option>
-                {% endfor %}
-            </select>
+    <details>
+    <br>
+        <summary>Adicionar Turma</summary>
+        <form action="/turmas/adicionar-turma" method="POST">
 
-        <label for="id_prof">Professor:</label>
-            <select name="id_prof" id="id_prof" required>
-                <option value="" disabled selected>Selecione um professor</option>
-                {% for professor in professores %}
-                    <option value="{{ professor.id_prof }}">{{ professor.nome }}</option>
-                {% endfor %}
-            </select>
+            <label for="id_disciplina">Disciplina:</label>
+                <select name="id_disc" id="id_disc" required>
+                    {% for disciplina in disciplinas %}
+                        <option value="{{ disciplina.id_disc }}">{{ disciplina.nome }}</option>
+                    {% endfor %}
+                </select>
 
-        <input type="int" name="semestre" placeholder="Semestre" required>
+            <label for="id_prof">Professor:</label>
+                <select name="id_prof" id="id_prof" required>
+                    <option value="" disabled selected>Selecione um professor</option>
+                    {% for professor in professores %}
+                        <option value="{{ professor.id_prof }}">{{ professor.nome }}</option>
+                    {% endfor %}
+                </select>
 
-        <input type="int" name="ano" placeholder="Ano" required>
+            <input type="int" name="semestre" placeholder="Semestre" required>
 
-        <input type="int" name="capacidade" placeholder="Capacidade" required>
+            <br>
 
-        <button type="submit">Cadastrar Turma</button>
-    </form>
+            <input type="int" name="ano" placeholder="Ano" required>
 
-    <h3>Pesquisar Turmas:</h3>
+            <input type="int" name="capacidade" placeholder="Capacidade" required>
 
-<form action="/turmas" method="GET" class="d-flex mb-3">
-        <input type="text" name="busca" class="form-control me-2" 
-            placeholder="Pesquisar por nome ou ID... (Deixe em branco para listar todos)" value="{{ busca }}">
-        <button type="submit" class="btn btn-primary">Buscar</button>
-        <a href="/turmas" class="btn btn-secondary ms-2">Limpar</a>
-    </form>
+            <button type="submit" class="btn btn-primary btn-sm">Cadastrar Turma</button>
+        </form>
+    </details>
 
-<h1>Lista de Turmas</h1>
-    <table class="table table-striped table-hover border">
-        <thead class="table-dark">
-            <tr>
-                <th>ID Turma</th>
-                <th>Disciplina</th>
-                <th>Professor</th>
-                <th>Semestre</th>
-                <th>Ano</th>
-                <th>Capacidade</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for turma in turmas %}
-            <tr>
-                <td>{{ turma.id_turma }}</td>
-                <td>{{ turma.disciplina }}</td>
-                <td>{{ turma.professor}}</td>
-                <td>{{ turma.semestre }}</td>
-                <td>{{ turma.ano }}</td>
-                <td>{{ turma.capacidade}}</td>
-                <td>
-                    <a href="/turmas/{{ turma.id_turma }}/editar-turma" class="btn btn-warning btn-sm">Editar turma</a>
-                    <a href="/turmas/{{ turma.id_turma }}/excluir-turma" 
-                    class="btn btn-danger btn-sm" 
-                    onclick="return confirm('Tem certeza que deseja excluir este aluno?')">
-                    Excluir
-                    </a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <nav>
-        <ul class="pagination">
-            <li class="page-item {% if page <= 1 %}disabled{% endif %}">
-                <a class="page-link" href="/turmas?page={{ 1 }}&busca={{ busca }}">Primeira Página</a>
-            </li>
-            <li class="page-item {% if page <= 1 %}disabled{% endif %}">
-                <a class="page-link" href="/turmas?page={{ page - 1 }}&busca={{ busca }}">Anterior</a>
-            </li>
-            <li class="page-item {% if page >= total_paginas %}disabled{% endif %}">
-                <a class="page-link" href="/turmas?page={{ page + 1 }}&busca={{ busca }}">Próximo</a>
-            </li>
-            <li class="page-item {% if page >= total_paginas %}disabled{% endif %}">
-                <a class="page-link" href="/turmas?page={{ total_paginas }}&busca={{ busca }}">Última página</a>
-            </li>
-        </ul>
-    </nav>
+<br>
+
+    <details open>
+        <br>
+        <summary>Pesquisar Turmas</summary>
+
+        <form action="/turmas" method="GET" class="d-flex mb-3">
+                <input type="text" name="busca" class="form-control me-2" 
+                    placeholder="Pesquisar por nome ou ID... (Deixe em branco para listar todos)" value="{{ busca }}">
+                <button type="submit" class="btn btn-primary">Buscar</button>
+                <a href="/turmas" class="btn btn-secondary ms-2">Limpar</a>
+            </form>
+
+        <h1>Lista de Turmas</h1>
+            <table class="table table-striped table-hover border">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID Turma</th>
+                        <th>Disciplina</th>
+                        <th>Professor</th>
+                        <th>Semestre</th>
+                        <th>Ano</th>
+                        <th>Capacidade</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for turma in turmas %}
+                    <tr>
+                        <td>{{ turma.id_turma }}</td>
+                        <td>{{ turma.disciplina }}</td>
+                        <td>{{ turma.professor}}</td>
+                        <td>{{ turma.semestre }}</td>
+                        <td>{{ turma.ano }}</td>
+                        <td>{{ turma.capacidade}}</td>
+                        <td>
+                            <a href="/turmas/editar-turma/{{ turma.id_turma }}" 
+                            class="btn btn-warning btn-sm">Editar turma</a>
+                            <a href="/turmas/excluir-turma/{{ turma.id_turma }}" 
+                            class="btn btn-danger btn-sm" 
+                            onclick="return confirm('Tem certeza que deseja excluir este aluno?')">
+                            Excluir
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <nav>
+                <ul class="pagination">
+                    <li class="page-item {% if page <= 1 %}disabled{% endif %}">
+                        <a class="page-link" href="/turmas?page={{ 1 }}&busca={{ busca }}">Primeira Página</a>
+                    </li>
+                    <li class="page-item {% if page <= 1 %}disabled{% endif %}">
+                        <a class="page-link" href="/turmas?page={{ page - 1 }}&busca={{ busca }}">Anterior</a>
+                    </li>
+                    <li class="page-item {% if page >= total_paginas %}disabled{% endif %}">
+                        <a class="page-link" href="/turmas?page={{ page + 1 }}&busca={{ busca }}">Próximo</a>
+                    </li>
+                    <li class="page-item {% if page >= total_paginas %}disabled{% endif %}">
+                        <a class="page-link" href="/turmas?page={{ total_paginas }}&busca={{ busca }}">Última página</a>
+                    </li>
+                </ul>
+            </nav>
+        </details>
 {% endblock %}

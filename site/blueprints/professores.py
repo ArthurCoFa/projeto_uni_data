@@ -58,9 +58,10 @@ def pagina_professores():
     conn.close()
     
     # O segredo é que o render_template precisa enviar essa variável atualizada
-    return render_template('professores.html', professores=professores, busca=busca, cursos=cursos, page=page, total_paginas=total_paginas)
+    return render_template('professores.html', professores=professores, busca=busca, 
+                           cursos=cursos, page=page, total_paginas=total_paginas)
 
-@professores_bp.route('/adicionar-professor', methods=['POST'])
+@professores_bp.route('/professores/adicionar-professor', methods=['POST'])
 def adicionar_professor():
     # Captura os dados enviados pelo formulário
     nome = request.form['nome']
@@ -91,7 +92,9 @@ def adicionar_professor():
     cursor = conn.cursor()
 
     # Executa o INSERT
-    cursor.execute("INSERT INTO professores (nome, cpf, email, titulacao, id_curso_coord) VALUES (%s, %s, %s, %s, %s)", (nome, cpf_limpo, email, titulacao, id_curso_coord))
+    cursor.execute("INSERT INTO professores (nome, cpf, email, titulacao, id_curso_coord) " \
+    "VALUES (%s, %s, %s, %s, %s)", (nome, cpf_limpo, email, titulacao, id_curso_coord))
+
     conn.commit()
     cursor.close()
     conn.close()
@@ -101,13 +104,13 @@ def adicionar_professor():
     # Volta para a tela inicial
     return redirect('/professores')
 
-@professores_bp.route('/excluir-professor/<int:id>')
-def excluir_professor(id):
+@professores_bp.route('/professores/excluir-professor/<int:id_prof>')
+def excluir_professor(id_prof):
     conn = get_db_connection()
     cursor = conn.cursor()
 
     # Executa o delete usando o ID recebido na URL
-    cursor.execute("DELETE FROM professores WHERE id_prof = %s", (id,))
+    cursor.execute("DELETE FROM professores WHERE id_prof = %s", (id_prof,))
 
     conn.commit()
     cursor.close()
@@ -116,12 +119,12 @@ def excluir_professor(id):
     flash("Professor excluído com sucesso!")
     return redirect('/professores')
 
-@professores_bp.route('/editar-professor/<int:id>', methods=['GET'])
-def editar_professor(id):
+@professores_bp.route('/professores/editar-professor/<int:id_prof>', methods=['GET'])
+def editar_professor(id_prof):
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
-    cursor.execute("SELECT * FROM professores WHERE id_prof = %s", (id,))
+    cursor.execute("SELECT * FROM professores WHERE id_prof = %s", (id_prof,))
     professor = cursor.fetchone()
 
     cursor.execute("SELECT * FROM cursos")
@@ -131,8 +134,8 @@ def editar_professor(id):
     conn.close()
     return render_template('editar_professor.html', professor=professor, cursos=cursos)
 
-@professores_bp.route('/atualizar-professor/<int:id>', methods=['POST'])
-def atualizar_professor(id):
+@professores_bp.route('/professores/atualizar-professor/<int:id_prof>', methods=['POST'])
+def atualizar_professor(id_prof):
     nome = request.form['nome']
 
     cpf_form = request.form['cpf']
@@ -147,8 +150,9 @@ def atualizar_professor(id):
     
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute("UPDATE professores SET nome=%s, cpf=%s, email=%s, titulacao=%s, id_curso_coord=%s WHERE id_prof=%s", 
-                   (nome, cpf_limpo, email, titulacao, id_curso_coord, id))
+    cursor.execute("UPDATE professores SET nome=%s, cpf=%s, email=%s, titulacao=%s, id_curso_coord=%s " \
+                   "WHERE id_prof=%s", 
+                   (nome, cpf_limpo, email, titulacao, id_curso_coord, id_prof))
     conn.commit()
     cursor.close()
     conn.close()

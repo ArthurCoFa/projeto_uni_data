@@ -2,6 +2,12 @@
 
 {% block content %}
 
+    <a href="/cursos/editar-disciplinas-curso/{{ curso.id_curso }}" class="btn btn-secondary btn-sm">Voltar</a>
+
+    <p><br></p>
+
+    <h1>Pesquisar Disciplinas Adicionáveis/h1>
+
     <form action="/cursos/editar-disciplinas-curso/{{ curso.id_curso }}/adicionar-disciplina/" method="GET" class="d-flex mb-3">
         <input type="text" name="busca" class="form-control me-2" 
             placeholder="Pesquisar por nome ou ID... (Deixe em branco para listar todos)" value="{{ busca }}">

@@ -1,94 +1,101 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <h3>Adicionar novo professor</h3>
-    <form action="/adicionar-professor" method="POST">
-        <input type="text" name="nome" placeholder="Nome do professor" required>
+    <details>
+        <br>
+        <summary>Adicionar novo Professor</summary>
+        <form action="/professores/adicionar-professor" method="POST">
+            <input type="text" name="nome" placeholder="Nome do professor" required>
 
-        <input type="text" name="cpf" id="cpf" placeholder="000.000.000-00" 
-            pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" title="Digite um CPF válido no formato 000.000.000-00" maxlength="14" required>
+            <input type="text" name="cpf" id="cpf" placeholder="000.000.000-00" 
+                pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" title="Digite um CPF válido no formato 000.000.000-00" maxlength="14" required>
 
-        <input type="text" name="email" placeholder="Email do professor" required>
+            <input type="text" name="email" placeholder="Email do professor" required>
 
-        </br>
+            </br>
 
-        <label for="curso">Coordenador do curso:</label>
-            <select name="id_curso_coord" id="curso" required>
-                    <option value="0">Nenhum</option>
-                {% for curso in cursos %}
-                    <option value="{{ curso.id_curso }}">{{ curso.nome }}</option>
-                {% endfor %}
+            <label for="curso">Coordenador do curso:</label>
+                <select name="id_curso_coord" id="curso" required>
+                        <option value="0">Nenhum</option>
+                    {% for curso in cursos %}
+                        <option value="{{ curso.id_curso }}">{{ curso.nome }}</option>
+                    {% endfor %}
+                </select>
+            
+            <label for="titulacao">Titulacao:</label>
+            <select name="titulacao" id="titulacao" required>
+                <option value="" disabled selected>Selecione uma titulação</option>
+                <option value="Mestre">Mestre</option>
+                <option value="Doutor">Doutor</option>
+                <option value="Pos-doutor">Pos-doutor</option>
             </select>
-        
-        <label for="titulacao">Titulacao:</label>
-        <select name="titulacao" id="titulacao" required>
-            <option value="" disabled selected>Selecione uma titulação</option>
-            <option value="Mestre">Mestre</option>
-            <option value="Doutor">Doutor</option>
-            <option value="Pos-doutor">Pos-doutor</option>
-        </select>
 
-        <button type="submit">Cadastrar professor</button>
-    </form>
+            <button type="submit">Cadastrar professor</button>
+        </form>
+    </details>
 
-    <h3>Pesquisar professor:</h3>
+    <br>
 
-    <form action="/professores" method="GET" class="d-flex mb-3">
-        <input type="text" name="busca" class="form-control me-2" 
-            placeholder="Pesquisar por nome ou ID... (Deixe em branco para listar todos)" value="{{ busca }}">
-        <button type="submit" class="btn btn-primary">Buscar</button>
-        <a href="/professores" class="btn btn-secondary ms-2">Limpar</a>
-    </form>
+    <details open>
+        <summary>Pesquisar Professores</summary>
+        <br>
+        <form action="/professores" method="GET" class="d-flex mb-3">
+            <input type="text" name="busca" class="form-control me-2" 
+                placeholder="Pesquisar por nome ou ID... (Deixe em branco para listar todos)" value="{{ busca }}">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+            <a href="/professores" class="btn btn-secondary ms-2">Limpar</a>
+        </form>
 
-    <h1 class="mb-4">Lista de professores</h1>
+        <h1 class="mb-4">Lista de professores</h1>
 
-    <table class="table table-striped table-hover border">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>CPF</th>
-                <th>Email</th>
-                <th>Titulacao</th>
-                <th>Coordenador do curso</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for professor in professores %}
-            <tr>
-                <td>{{ professor.id_prof }}</td>
-                <td>{{ professor.nome }}</td>
-                <td>{{ professor.cpf }}</td>
-                <td>{{ professor.email }}</td>
-                <td>{{ professor.titulacao }}</td>
-                <td>{{ professor.curso }}</td>
-                <td>
-                    <a href="/editar-professor/{{ professor.id_prof }}" class="btn btn-warning btn-sm">Editar</a>
-                    <a href="/excluir-professor/{{ professor.id_prof }}" 
-                    class="btn btn-danger btn-sm" 
-                    onclick="return confirm('Tem certeza que deseja excluir este aluno?')">
-                    Excluir
-                    </a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <nav>
-        <ul class="pagination">
-            <li class="page-item {% if page <= 1 %}disabled{% endif %}">
-                <a class="page-link" href="/professores?page={{ 1 }}&busca={{ busca }}">Primeira Página</a>
-            </li>
-            <li class="page-item {% if page <= 1 %}disabled{% endif %}">
-                <a class="page-link" href="/professores?page={{ page - 1 }}&busca={{ busca }}">Anterior</a>
-            </li>
-            <li class="page-item {% if page >= total_paginas %}disabled{% endif %}">
-                <a class="page-link" href="/professores?page={{ page + 1 }}&busca={{ busca }}">Próximo</a>
-            </li>
-            <li class="page-item {% if page >= total_paginas %}disabled{% endif %}">
-                <a class="page-link" href="/professores?page={{ total_paginas }}&busca={{ busca }}">Última página</a>
-            </li>
-        </ul>
-    </nav>
+        <table class="table table-striped table-hover border">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th>Email</th>
+                    <th>Titulacao</th>
+                    <th>Coordenador do curso</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for professor in professores %}
+                <tr>
+                    <td>{{ professor.id_prof }}</td>
+                    <td>{{ professor.nome }}</td>
+                    <td>{{ professor.cpf }}</td>
+                    <td>{{ professor.email }}</td>
+                    <td>{{ professor.titulacao }}</td>
+                    <td>{{ professor.curso }}</td>
+                    <td>
+                        <a href="/professores/editar-professor/{{ professor.id_prof }}" class="btn btn-warning btn-sm">Editar</a>
+                        <a href="/professores/excluir-professor/{{ professor.id_prof }}" 
+                        class="btn btn-danger btn-sm" 
+                        onclick="return confirm('Tem certeza que deseja excluir este aluno?')">
+                        Excluir
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <nav>
+            <ul class="pagination">
+                <li class="page-item {% if page <= 1 %}disabled{% endif %}">
+                    <a class="page-link" href="/professores?page={{ 1 }}&busca={{ busca }}">Primeira Página</a>
+                </li>
+                <li class="page-item {% if page <= 1 %}disabled{% endif %}">
+                    <a class="page-link" href="/professores?page={{ page - 1 }}&busca={{ busca }}">Anterior</a>
+                </li>
+                <li class="page-item {% if page >= total_paginas %}disabled{% endif %}">
+                    <a class="page-link" href="/professores?page={{ page + 1 }}&busca={{ busca }}">Próximo</a>
+                </li>
+                <li class="page-item {% if page >= total_paginas %}disabled{% endif %}">
+                    <a class="page-link" href="/professores?page={{ total_paginas }}&busca={{ busca }}">Última página</a>
+                </li>
+            </ul>
+        </nav>
+    </details>
 {% endblock %}

@@ -1,7 +1,12 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<h3>Atualizar informações do Curso</h3>
+
+    <a href="/cursos" class="btn btn-secondary btn-sm">Voltar</a>
+
+    <p><br></p>
+
+    <h3>Atualizar informações do Curso</h3>
     <form action="/cursos/atualizar-curso/{{ curso.id_curso }}" method="POST">
 
         <input type="text" name="nome" placeholder="Nome do curso" value="{{ curso.nome }}" required>

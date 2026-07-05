@@ -49,3 +49,34 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  // 1. Pega o caminho da barra de endereços (ex: /alunos/editar-aluno/12)
+  const caminhoAtual = window.location.pathname;
+
+  // 2. Procura os links do menu do Bootstrap
+  const linksMenu = document.querySelectorAll(".navbar-nav .nav-link");
+
+  linksMenu.forEach(link => {
+    const hrefLink = link.getAttribute("href");
+
+    // REGRA ESPECIAL PARA A PÁGINA INICIAL (Home)
+    if (hrefLink === "/") {
+      if (caminhoAtual === "/") {
+        link.classList.add("active");
+      } else {
+        link.classList.remove("active");
+      }
+    } 
+    // REGRA PARA AS OUTRAS PÁGINAS (/alunos, /professores, etc.)
+    else {
+      // Se a URL atual começar com o texto do link, ele fica ativo!
+      // Exemplo: "/alunos/editar" começa com "/alunos"? Sim! Então acende.
+      if (caminhoAtual.startsWith(hrefLink)) {
+        link.classList.add("active");
+      } else {
+        link.classList.remove("active");
+      }
+    }
+  });
+});

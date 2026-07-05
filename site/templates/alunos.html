@@ -1,86 +1,94 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <h3>Adicionar novo aluno</h3>
-    <form action="/alunos/adicionar-alunos" method="POST">
-        <input type="text" name="nome" placeholder="Nome do aluno" required>
+    <details>
+    </br>
+        <summary>Adicionar novo aluno</summary>
+            <form action="/alunos/adicionar-alunos" method="POST">
+                <input type="text" name="nome" placeholder="Nome do aluno" required>
 
-        <input type="text" name="cpf" id="cpf" placeholder="000.000.000-00" 
-            pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" title="Digite um CPF válido no formato 000.000.000-00" maxlength="14" required>
+                <input type="text" name="cpf" id="cpf" placeholder="000.000.000-00" 
+                    pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" title="Digite um CPF válido no formato 000.000.000-00" maxlength="14" required>
 
-        <input type="text" name="email" placeholder="Email do aluno" required>
+                <input type="text" name="email" placeholder="Email do aluno" required>
 
-        <label for="curso">Curso:</label>
-            <select name="id_curso" id="curso" required>
-                <option value="" disabled selected>Selecione um curso</option>
-                {% for curso in cursos %}
-                    <option value="{{ curso.id_curso }}">{{ curso.nome }}</option>
+                <label for="curso">Curso:</label>
+                    <select name="id_curso" id="curso" required>
+                        <option value="" disabled selected>Selecione um curso</option>
+                        {% for curso in cursos %}
+                            <option value="{{ curso.id_curso }}">{{ curso.nome }}</option>
+                        {% endfor %}
+                    </select>
+
+                <input type="date" name="data_nascimento" required>
+
+                <button type="submit" class="btn btn-primary btn-sm">Cadastrar aluno</button>
+            </form>
+    </details> 
+
+    <br>
+    
+    <details open>
+        <br>
+        <summary> Pesquisar alunos </summary>
+
+        <form action="/alunos" method="GET" class="d-flex mb-3">
+            <input type="text" name="busca" class="form-control me-2" 
+                placeholder="Pesquisar por nome ou ID... (Deixe em branco para listar todos)" value="{{ busca }}">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+            <a href="/alunos" class="btn btn-secondary ms-2">Limpar</a>
+        </form>
+
+        <h1 class="mb-4">Lista de Alunos</h1>
+
+        <table class="table table-striped table-hover border">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th>Email</th>
+                    <th>Data de nascimento</th>
+                    <th>Curso</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for aluno in alunos %}
+                <tr>
+                    <td>{{ aluno.id_aluno }}</td>
+                    <td>{{ aluno.nome }}</td>
+                    <td>{{ aluno.cpf }}</td>
+                    <td>{{ aluno.email }}</td>
+                    <td>{{ aluno.dt_nasc }}</td>
+                    <td>{{ aluno.curso }}</td>
+                    <td>
+                        <a href="/alunos/editar-aluno/{{ aluno.id_aluno }}" class="btn btn-warning btn-sm">Editar</a>
+                        <a href="/alunos/excluir-aluno/{{ aluno.id_aluno }}" 
+                        class="btn btn-danger btn-sm" 
+                        onclick="return confirm('Tem certeza que deseja excluir este aluno?')">
+                        Excluir
+                        </a>
+                    </td>
+                </tr>
                 {% endfor %}
-            </select>
-
-        <input type="date" name="data_nascimento" required>
-
-        <button type="submit">Cadastrar aluno</button>
-    </form>
-
-    <h3>Pesquisar alunos</h3>
-
-    <form action="/alunos" method="GET" class="d-flex mb-3">
-        <input type="text" name="busca" class="form-control me-2" 
-            placeholder="Pesquisar por nome ou ID... (Deixe em branco para listar todos)" value="{{ busca }}">
-        <button type="submit" class="btn btn-primary">Buscar</button>
-        <a href="/alunos" class="btn btn-secondary ms-2">Limpar</a>
-    </form>
-
-    <h1 class="mb-4">Lista de Alunos</h1>
-
-    <table class="table table-striped table-hover border">
-        <thead class="table-dark">
-            <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>CPF</th>
-                <th>Email</th>
-                <th>Data de nascimento</th>
-                <th>Curso</th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for aluno in alunos %}
-            <tr>
-                <td>{{ aluno.id_aluno }}</td>
-                <td>{{ aluno.nome }}</td>
-                <td>{{ aluno.cpf }}</td>
-                <td>{{ aluno.email }}</td>
-                <td>{{ aluno.dt_nasc }}</td>
-                <td>{{ aluno.curso }}</td>
-                <td>
-                    <a href="/alunos/editar-aluno/{{ aluno.id_aluno }}" class="btn btn-warning btn-sm">Editar</a>
-                    <a href="/alunos/excluir-aluno/{{ aluno.id_aluno }}" 
-                    class="btn btn-danger btn-sm" 
-                    onclick="return confirm('Tem certeza que deseja excluir este aluno?')">
-                    Excluir
-                    </a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    <nav>
-        <ul class="pagination">
-            <li class="page-item {% if page <= 1 %}disabled{% endif %}">
-                <a class="page-link" href="/alunos?page={{ 1 }}&busca={{ busca }}">Primeira Página</a>
-            </li>
-            <li class="page-item {% if page <= 1 %}disabled{% endif %}">
-                <a class="page-link" href="/alunos?page={{ page - 1 }}&busca={{ busca }}">Anterior</a>
-            </li>
-            <li class="page-item {% if page >= total_paginas %}disabled{% endif %}">
-                <a class="page-link" href="/alunos?page={{ page + 1 }}&busca={{ busca }}">Próximo</a>
-            </li>
-            <li class="page-item {% if page >= total_paginas %}disabled{% endif %}">
-                <a class="page-link" href="/alunos?page={{ total_paginas }}&busca={{ busca }}">Última página</a>
-            </li>
-        </ul>
-    </nav>
+            </tbody>
+        </table>
+        <nav>
+            <ul class="pagination">
+                <li class="page-item {% if page <= 1 %}disabled{% endif %}">
+                    <a class="page-link" href="/alunos?page={{ 1 }}&busca={{ busca }}">Primeira Página</a>
+                </li>
+                <li class="page-item {% if page <= 1 %}disabled{% endif %}">
+                    <a class="page-link" href="/alunos?page={{ page - 1 }}&busca={{ busca }}">Anterior</a>
+                </li>
+                <li class="page-item {% if page >= total_paginas %}disabled{% endif %}">
+                    <a class="page-link" href="/alunos?page={{ page + 1 }}&busca={{ busca }}">Próximo</a>
+                </li>
+                <li class="page-item {% if page >= total_paginas %}disabled{% endif %}">
+                    <a class="page-link" href="/alunos?page={{ total_paginas }}&busca={{ busca }}">Última página</a>
+                </li>
+            </ul>
+        </nav>
+    </details>
 {% endblock %}

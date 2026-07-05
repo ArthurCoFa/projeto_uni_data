@@ -1,6 +1,11 @@
 {% extends 'layout.html' %}
 
 {% block content %}
+
+    <a href="/alunos" class="btn btn-secondary btn-sm">Voltar</a>
+
+    <p><br></p>
+
     <h3>Atualizar informações do aluno</h3>
     <form action="/alunos/editar-aluno/{{ aluno.id_aluno }}/atualizar" method="POST">
 

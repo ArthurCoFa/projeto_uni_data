@@ -1,8 +1,13 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<h3>Atualizar informações da Disciplina</h3>
-    <form action="/atualizar-disciplina/{{ disciplina.id_disc }}" method="POST">
+
+<a href="/disciplinas" class="btn btn-secondary btn-sm">Voltar</a>
+
+<p><br></p>
+
+<h1>Atualizar informações da Disciplina</h1>
+    <form action="/disciplinas/atualizar-disciplina/{{ disciplina.id_disc }}" method="POST">
 
         <input type="text" name="nome" placeholder="Nome do curso" value="{{ disciplina.nome }}" required>
 
@@ -10,7 +15,7 @@
 
         <input type="int" name="creditos" placeholder="Creditos" value="{{ disciplina.creditos }}" required>
 
-        <input type="text" name="ementa" placeholder="Ementa">
+        <input type="text" name="ementa" placeholder="Ementa" value="{{ disciplina.ementa }}">
         
         <button type="submit" class="btn btn-primary">Salvar Alterações</button>
     </form>

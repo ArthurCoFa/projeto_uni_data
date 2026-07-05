@@ -74,7 +74,7 @@ def pagina_turmas():
     return render_template('turmas.html', busca=busca, turmas=turmas, page=page, 
                            total_paginas=total_paginas, disciplinas=disciplinas, professores = professores)
 
-@turmas_bp.route('/adicionar-turma', methods=['POST'])
+@turmas_bp.route('/turmas/adicionar-turma', methods=['POST'])
 def adicionar_turma():
     
     id_disc = request.form['id_disc']
@@ -103,14 +103,14 @@ def adicionar_turma():
     # Volta para a tela inicial
     return redirect('/turmas')
 
-@turmas_bp.route('/turmas/<int:id>/excluir-turma')
-def excluir_turma(id):
+@turmas_bp.route('/turmas/excluir-turma/<int:id_turma>')
+def excluir_turma(id_turma):
 
     conn = get_db_connection()
     cursor = conn.cursor()
 
     # Executa o delete usando o ID recebido na URL
-    cursor.execute("DELETE FROM turmas WHERE id_turma = %s", (id,))
+    cursor.execute("DELETE FROM turmas WHERE id_turma = %s", (id_turma,))
 
     conn.commit()
     cursor.close()
@@ -119,8 +119,8 @@ def excluir_turma(id):
     flash("Disciplina excluída com sucesso!")
     return redirect('/turmas')
 
-@turmas_bp.route('/turmas/<int:id>/editar-turma', methods=['GET'])
-def editar_turma(id):
+@turmas_bp.route('/turmas/editar-turma/<int:id_turma>', methods=['GET'])
+def editar_turma(id_turma):
 
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
@@ -131,15 +131,16 @@ def editar_turma(id):
     cursor.execute("SELECT id_prof, nome FROM professores")
     professores = cursor.fetchall()
 
-    cursor.execute("SELECT * FROM turmas WHERE id_turma = %s", (id,))
+    cursor.execute("SELECT * FROM turmas WHERE id_turma = %s", (id_turma,))
     turma = cursor.fetchone()
 
     cursor.close()
     conn.close()
-    return render_template('editar_turma.html', turma=turma, disciplinas=disciplinas, professores = professores)
+    return render_template('editar_turma.html', turma=turma, disciplinas=disciplinas, 
+                           professores = professores)
 
-@turmas_bp.route('/turmas/<int:id>/atualizar_turma', methods=['POST'])
-def atualizar_disciplina(id):
+@turmas_bp.route('/turmas/atualizar_turma/<int:id_turma>', methods=['POST'])
+def atualizar_disciplina(id_turma):
 
     id_disc = request.form['id_disc']
 
@@ -156,7 +157,8 @@ def atualizar_disciplina(id):
 
     # Executa o INSERT
     cursor.execute("UPDATE turmas SET id_disc = %s, id_prof = %s, " \
-    "semestre = %s, ano = %s, capacidade = %s WHERE id_turma = %s", (id_disc, id_prof, semestre, ano, capacidade, id))
+    "semestre = %s, ano = %s, capacidade = %s WHERE id_turma = %s", 
+    (id_disc, id_prof, semestre, ano, capacidade, id_turma))
     
     conn.commit()
     cursor.close()

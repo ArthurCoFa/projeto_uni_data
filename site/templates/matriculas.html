@@ -2,7 +2,10 @@
 
 {% block content %}
 
-<a href="/adicionar-matricula/aluno" class="btn btn-secondary btn-sm">Adicionar matrícula</a>
+<a href="/matriculas/adicionar-matricula/aluno" class="btn btn-secondary btn-sm">Adicionar matrícula</a>
+
+
+<p><br></p>
 
 <h1 class="mb-4">Lista de Matrículas</h1>
 
@@ -32,8 +35,8 @@
                 <td>{{ matricula.frequencia }}</td>
                 <td>{{ matricula.situacao }}</td>
                 <td>
-                    <a href="/matriculas/{{ matricula.id_mat }}/editar-matricula" class="btn btn-warning btn-sm">Editar</a>
-                    <a href="/matriculas/{{ matricula.id_mat }}/excluir-matricula" 
+                    <a href="/matriculas/editar-matricula/{{ matricula.id_mat }}" class="btn btn-warning btn-sm">Editar</a>
+                    <a href="/matriculas/excluir-matricula/{{ matricula.id_mat }}" 
                     class="btn btn-danger btn-sm" 
                     onclick="return confirm('Tem certeza que deseja excluir este aluno?')">
                     Excluir

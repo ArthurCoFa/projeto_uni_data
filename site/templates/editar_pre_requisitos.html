@@ -1,18 +1,69 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <h3>Adicionar Pré-Requisito</h3>
-    <form action="/disciplinas/{{ disciplina.id_disc }}/adicionar-pre-requisito" method="POST">
 
-        <label for="pre-requisito">Pré-requisito:</label>
-            <select name="pre-requisito" id="pre-requisito" required>
-                {% for di in disciplinas %}
-                    <option value="{{ di.id_disc }}">{{ di.nome }}</option>
+    <a href="/disciplinas" class="btn btn-secondary btn-sm">Voltar</a>
+
+    <p><br></p>
+
+    <details open>
+        <br>
+        <summary> Pesquisar pré-requisitos </summary>
+
+        <form action="/disciplinas/editar-disciplina/{{ disciplina.id_disc }}/editar-pre-requisitos" method="GET" class="d-flex mb-3">
+            <input type="text" name="busca" class="form-control me-2" 
+                placeholder="Pesquisar por nome ou ID... (Deixe em branco para listar todos)" value="{{ busca }}">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+            <a href="/disciplinas/editar-disciplina/{{ disciplina.id_disc }}/editar-pre-requisitos" class="btn btn-secondary ms-2">Limpar</a>
+        </form>
+
+    <h1>Adicionar Pré-Requisito</h1>
+    <table class="table table-striped table-hover border">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Ações</th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% for d in disciplinas_adicionaveis %}
+                    <tr>
+                    <td>{{ d.id_disc }}</td>
+                    <td>{{ d.nome }}</td>
+                    <td>
+                        <form 
+                        action="/disciplinas/editar-disciplina/{{ id_disc }}/editar-pre-requisitos/adicionar-pre-requisito/{{ d.id_disc }}" method="POST">
+                            <button type="submit" class="btn btn-primary btn-sm">Adicionar pré-requisito</button>
+                        </form>
+                    </td>
+                </tr>
                 {% endfor %}
-            </select>
+            </tbody>
+        </table>
+        <nav>
+            <ul class="pagination">
+                <li class="page-item {% if page <= 1 %}disabled{% endif %}">
+                    <a class="page-link" 
+                    href="/disciplinas/editar-disciplina/{{ id_disc }}/editar-pre-requisitos?page={{ 1 }}&busca={{ busca }}">Primeira Página</a>
+                </li>
+                <li class="page-item {% if page <= 1 %}disabled{% endif %}">
+                    <a class="page-link" 
+                    href="/disciplinas/editar-disciplina/{{ id_disc }}/editar-pre-requisitos?page={{ page - 1 }}&busca={{ busca }}">Anterior</a>
+                </li>
+                <li class="page-item {% if page >= total_paginas %}disabled{% endif %}">
+                    <a class="page-link" 
+                    href="/disciplinas/editar-disciplina/{{ id_disc }}/editar-pre-requisitos?page={{ page + 1 }}&busca={{ busca }}">Próximo</a>
+                </li>
+                <li class="page-item {% if page >= total_paginas %}disabled{% endif %}">
+                    <a class="page-link" 
+                    href="/disciplinas/editar-disciplina/{{ id_disc }}/editar-pre-requisitos?page={{ total_paginas }}&busca={{ busca }}">Última página</a>
+                </li>
+            </ul>
+        </nav>
+    </details>
 
-        <button type="submit">Cadastrar pré-requisito</button>
-    </form>
+    <br>
 
     <h1>Lista de Pré-Requisitos da Disciplina {{ disciplina.nome }}</h1>
         <table class="table table-striped table-hover border">
@@ -29,7 +80,8 @@
                     <td>{{ pre_requisito.id_d }}</td>
                     <td>{{ pre_requisito.disciplina }}</td>
                     <td>
-                        <a href="/disciplinas/{{ disciplina.id_disc }}/excluir-pre-requisito/{{ pre_requisito.id_d }}" 
+                        <a href=
+                        "/disciplinas/editar-disciplina/{{ disciplina.id_disc }}/editar-pre-requisito/excluir-pre-requisito/{{ pre_requisito.id_d }}" 
                         class="btn btn-danger btn-sm" 
                         onclick="return confirm('Tem certeza que deseja excluir este aluno?')">
                         Excluir

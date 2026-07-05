@@ -57,7 +57,7 @@ def pagina_matriculas():
     return render_template('matriculas.html', busca=busca, page=page, 
                            total_paginas=total_paginas, matriculas=matriculas)
 
-@matriculas_bp.route('/adicionar-matricula/aluno')
+@matriculas_bp.route('/matriculas/adicionar-matricula/aluno')
 def adicionar_aluno_matricula():
 
     busca = request.args.get('busca', '')
@@ -103,7 +103,7 @@ def adicionar_aluno_matricula():
     # Volta para a tela inicial
     return render_template('adicionar_matricula.html', alunos=alunos, page=page, total_paginas=total_paginas)
 
-@matriculas_bp.route('/adicionar-matricula/aluno/<int:id_aluno>/turma')
+@matriculas_bp.route('/matriculas/adicionar-matricula/aluno/<int:id_aluno>/turma')
 def adicionar_turma_matricula(id_aluno):
 
     total_registros = 0
@@ -121,8 +121,7 @@ def adicionar_turma_matricula(id_aluno):
         return redirect(url_for('disciplinas.pagina_disciplinas', page=1, busca=busca))
     elif page > total_paginas: 
         flash("Você foi redirecionado para a última página disponível.")
-        return redirect(url_for('disciplinas.pagina_disciplinas', page=total_paginas, busca=busca))
-        
+        return redirect(url_for('disciplinas.pagina_disciplinas', page=total_paginas, busca=busca)) 
 
     offset = (page - 1) * PER_PAGE          # Cálculo do pulo
 
@@ -169,7 +168,7 @@ def adicionar_turma_matricula(id_aluno):
                            total_paginas=total_paginas, disciplinas=disciplinas, 
                            professores = professores, id_aluno=id_aluno)
 
-@matriculas_bp.route('/adicionar-matricula/aluno/<int:id_aluno>/turma/<int:id_turma>')
+@matriculas_bp.route('/matriculas/adicionar-matricula/aluno/<int:id_aluno>/turma/<int:id_turma>')
 def adicionar_matricula_final(id_aluno, id_turma):
     
     conn = get_db_connection()
@@ -188,14 +187,14 @@ def adicionar_matricula_final(id_aluno, id_turma):
     # Volta para a tela inicial
     return redirect('/matriculas')
 
-@matriculas_bp.route('/matriculas/<int:id>/excluir-matricula')
-def excluir_matricula(id):
+@matriculas_bp.route('/matriculas/excluir-matricula/<int:id_mat>')
+def excluir_matricula(id_mat):
 
     conn = get_db_connection()
     cursor = conn.cursor()
 
     # Executa o delete usando o ID recebido na URL
-    cursor.execute("DELETE FROM matriculas WHERE id_mat = %s", (id,))
+    cursor.execute("DELETE FROM matriculas WHERE id_mat = %s", (id_mat,))
 
     conn.commit()
     cursor.close()
@@ -204,7 +203,7 @@ def excluir_matricula(id):
     flash("Disciplina excluída com sucesso!")
     return redirect('/matriculas')
 
-@matriculas_bp.route('/matriculas/<int:id_mat>/editar-matricula')
+@matriculas_bp.route('/matriculas/editar-matricula/<int:id_mat>')
 def editar_matricula(id_mat):
     
     conn = get_db_connection()
@@ -216,7 +215,7 @@ def editar_matricula(id_mat):
     # Volta para a tela inicial
     return render_template('editar_matricula.html', id_mat=id_mat)
 
-@matriculas_bp.route('/matriculas/<int:id_mat>/editar-matricula/aluno/turma', methods=['POST'])
+@matriculas_bp.route('/matriculas/editar-matricula/<int:id_mat>/rendimento', methods=['POST'])
 def editar_matricula_final(id_mat):
     
     nota = request.form['nota']

@@ -1,12 +1,19 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <h3>Adicionar disciplina no curso {{ curso.nome }}</h3>
+
+    <a href="/cursos" class="btn btn-secondary btn-sm">Voltar</a>
+
+    <p><br></p>
+
+    <h1>Adicionar disciplina no curso {{ curso.nome }}</h1>
 
     <a href="/cursos/editar-disciplinas-curso/{{ curso.id_curso }}/adicionar-disciplina/" 
         class="btn btn-primary btn-sm">Adicionar</a>
 
-    <h3>Pesquisar Disciplina</h3>
+    <p><br></p>
+
+    <h1 class="mb-4">Pesquisar Disciplinas</h1>
 
     <form action="/cursos/editar-disciplinas-curso/{{ curso.id_curso }}" method="GET" class="d-flex mb-3">
         <input type="text" name="busca" class="form-control me-2" 
@@ -15,7 +22,7 @@
         <a href="/cursos/editar-disciplinas-curso/{{ curso.id_curso }}" class="btn btn-secondary ms-2">Limpar</a>
     </form>
 
-    <h1>Lista de disciplina do curso {{ curso.nome }} </h1>
+    <h1 class="mb-4">Lista de disciplina do curso {{ curso.nome }} </h1>
         <table class="table table-striped table-hover border">
             <thead class="table-dark">
                 <tr>

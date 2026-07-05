@@ -1,8 +1,13 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<h3>Adicionar turma</h3>
-    <form action="/turmas/{{ turma.id_turma }}/atualizar_turma" method="POST">
+
+<a href="/turmas" class="btn btn-secondary btn-sm">Voltar</a>
+
+<p><br></p>   
+
+<h3>Editar turma</h3>
+    <form action="/turmas/atualizar_turma/{{ turma.id_turma }}" method="POST">
 
         <label for="id_disciplina">Disciplina:</label>
             <select name="id_disc" id="id_disc" required>

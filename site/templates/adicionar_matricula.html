@@ -1,13 +1,18 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-<h3>Pesquisar alunos</h3>
 
-    <form action="/adicionar-matricula/aluno" method="GET" class="d-flex mb-3">
+<a href="/matriculas" class="btn btn-secondary btn-sm">Voltar</a>
+
+<p><br></p>
+
+<h1>Pesquisar alunos</h1>
+
+    <form action="/matriculas/adicionar-matricula/aluno" method="GET" class="d-flex mb-3">
         <input type="text" name="busca" class="form-control me-2" 
             placeholder="Pesquisar por nome ou ID... (Deixe em branco para listar todos)" value="{{ busca }}">
         <button type="submit" class="btn btn-primary">Buscar</button>
-        <a href="/adicionar-matricula/aluno" class="btn btn-secondary ms-2">Limpar</a>
+        <a href="/matriculas/adicionar-matricula/aluno" class="btn btn-secondary ms-2">Limpar</a>
     </form>
 
     <h1 class="mb-4">Lista de Alunos</h1>
@@ -34,7 +39,7 @@
                 <td>{{ aluno.dt_nasc }}</td>
                 <td>{{ aluno.curso }}</td>
                 <td>
-                    <a href="/adicionar-matricula/aluno/{{ aluno.id_aluno }}/turma" class="btn btn-primary btn-sm">Adicionar Aluno</a>
+                    <a href="/matriculas/adicionar-matricula/aluno/{{ aluno.id_aluno }}/turma" class="btn btn-primary btn-sm">Adicionar Aluno</a>
                 </td>
             </tr>
             {% endfor %}
@@ -43,16 +48,16 @@
     <nav>
         <ul class="pagination">
             <li class="page-item {% if page <= 1 %}disabled{% endif %}">
-                <a class="page-link" href="/adicionar-matricula/aluno?page={{ 1 }}&busca={{ busca }}">Primeira Página</a>
+                <a class="page-link" href="/matriculas/adicionar-matricula/aluno?page={{ 1 }}&busca={{ busca }}">Primeira Página</a>
             </li>
             <li class="page-item {% if page <= 1 %}disabled{% endif %}">
-                <a class="page-link" href="/adicionar-matricula/aluno?page={{ page - 1 }}&busca={{ busca }}">Anterior</a>
+                <a class="page-link" href="/matriculas/adicionar-matricula/aluno?page={{ page - 1 }}&busca={{ busca }}">Anterior</a>
             </li>
             <li class="page-item {% if page >= total_paginas %}disabled{% endif %}">
-                <a class="page-link" href="/adicionar-matricula/aluno?page={{ page + 1 }}&busca={{ busca }}">Próximo</a>
+                <a class="page-link" href="/matriculas/adicionar-matricula/aluno?page={{ page + 1 }}&busca={{ busca }}">Próximo</a>
             </li>
             <li class="page-item {% if page >= total_paginas %}disabled{% endif %}">
-                <a class="page-link" href="/adicionar-matricula/aluno?page={{ total_paginas }}&busca={{ busca }}">Última página</a>
+                <a class="page-link" href="/matriculas/adicionar-matricula/aluno?page={{ total_paginas }}&busca={{ busca }}">Última página</a>
             </li>
         </ul>
     </nav>

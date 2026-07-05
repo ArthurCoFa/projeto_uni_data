@@ -1,32 +1,40 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <h3>Adicionar curso</h3>
-    <form action="/cursos/adicionar-curso" method="POST">
-        <input type="text" name="nome" placeholder="Nome do curso" required>
+    <details>
+        <br>
+        <summary>Adicionar novo Curso</summary>
+        <form action="/cursos/adicionar-curso" method="POST">
+            <input type="text" name="nome" placeholder="Nome do curso" required>
 
-        <input type="int" name="carga_horaria_total" placeholder="Carga Horária Total" required>
+            <input type="int" name="carga_horaria_total" placeholder="Carga Horária Total" required>
 
-        <label for="tipo">Tipo:</label>
-        <select name="tipo" id="tipo" required>
-            <option value="" disabled selected>Selecione um tipo</option>
-            <option value="Graduacao">Graduação</option>
-            <option value="Pos-Graduacao">Pós-Graduação</option>
-        </select>
+            <label for="tipo">Tipo:</label>
+            <select name="tipo" id="tipo" required>
+                <option value="" disabled selected>Selecione um tipo</option>
+                <option value="Graduacao">Graduação</option>
+                <option value="Pos-Graduacao">Pós-Graduação</option>
+            </select>
 
-        <button type="submit">Cadastrar curso</button>
-    </form>
+            <button type="submit" class="btn btn-primary btn-sm">Cadastrar curso</button>
+        </form>
+    </details>
 
-    <h3>Pesquisar Curso:</h3>
+    <br>
 
-    <form action="/cursos" method="GET" class="d-flex mb-3">
-        <input type="text" name="busca" class="form-control me-2" 
-            placeholder="Pesquisar por nome ou ID... (Deixe em branco para listar todos)" value="{{ busca }}">
-        <button type="submit" class="btn btn-primary">Buscar</button>
-        <a href="/cursos" class="btn btn-secondary ms-2">Limpar</a>
-    </form>
+    <details open>
+        <summary>Pesquisar Cursos</summary>
 
-    <h1>Lista de cursos</h1>
+        <br>
+
+        <form action="/cursos" method="GET" class="d-flex mb-3">
+            <input type="text" name="busca" class="form-control me-2" 
+                placeholder="Pesquisar por nome ou ID... (Deixe em branco para listar todos)" value="{{ busca }}">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+            <a href="/cursos" class="btn btn-secondary ms-2">Limpar</a>
+        </form>
+
+        <h1>Lista de Cursos</h1>
         <table class="table table-striped table-hover border">
             <thead class="table-dark">
                 <tr>
@@ -73,4 +81,5 @@
                 </li>
             </ul>
         </nav>
+    </details>
 {% endblock %}
