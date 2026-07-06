@@ -5,18 +5,23 @@
         <br>
         <summary>Adicionar novo Curso</summary>
         <form action="/cursos/adicionar-curso" method="POST">
-            <input type="text" name="nome" placeholder="Nome do curso" required>
+            <label for="nome">
+                <input type="text" name="nome" placeholder="Nome do curso" required>
+            </label>
 
-            <input type="int" name="carga_horaria_total" placeholder="Carga Horária Total" required>
+            <label for="ch_total">
+                <input type="int" name="carga_horaria_total" placeholder="Carga Horária Total" required>
+            </label>
 
-            <label for="tipo">Tipo:</label>
-            <select name="tipo" id="tipo" required>
-                <option value="" disabled selected>Selecione um tipo</option>
-                <option value="Graduacao">Graduação</option>
-                <option value="Pos-Graduacao">Pós-Graduação</option>
-            </select>
+            <label for="tipo">
+                <select name="tipo" id="tipo" required>
+                    <option value="" disabled selected>Selecione um tipo</option>
+                    <option value="Graduacao">Graduação</option>
+                    <option value="Pos-Graduacao">Pós-Graduação</option>
+                </select>
+            </label>
 
-            <button type="submit" class="btn btn-primary btn-sm">Cadastrar curso</button>
+            <button type="submit" class="btn btn-primary">Cadastrar curso</button>
         </form>
     </details>
 
@@ -28,7 +33,7 @@
         <br>
 
         <form action="/cursos" method="GET" class="d-flex mb-3">
-            <input type="text" name="busca" class="form-control me-2" 
+            <input style="max-width: 1200px;" type="text" name="busca" class="form-control me-2" 
                 placeholder="Pesquisar por nome ou ID... (Deixe em branco para listar todos)" value="{{ busca }}">
             <button type="submit" class="btn btn-primary">Buscar</button>
             <a href="/cursos" class="btn btn-secondary ms-2">Limpar</a>
@@ -57,7 +62,7 @@
                         <a href="/cursos/editar-disciplinas-curso/{{ curso.id_curso }}" class="btn btn-warning btn-sm">Editar Disciplinas</a>
                         <a href="/cursos/excluir-curso/{{ curso.id_curso }}" 
                         class="btn btn-danger btn-sm" 
-                        onclick="return confirm('Tem certeza que deseja excluir este aluno?')">
+                        onclick="return confirm('Tem certeza que deseja excluir este curso?')">
                         Excluir
                         </a>
                     </td>

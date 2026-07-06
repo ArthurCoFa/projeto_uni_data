@@ -2,14 +2,14 @@
 
 {% block content %}
 
-<a href="/matriculas" class="btn btn-secondary btn-sm">Voltar</a>
+<a href="/matriculas" class="btn btn-secondary">Voltar</a>
 
 <p><br></p>
 
 <h1>Pesquisar alunos</h1>
 
     <form action="/matriculas/adicionar-matricula/aluno" method="GET" class="d-flex mb-3">
-        <input type="text" name="busca" class="form-control me-2" 
+        <input style="max-width: 1200px;" type="text" name="busca" class="form-control me-2" 
             placeholder="Pesquisar por nome ou ID... (Deixe em branco para listar todos)" value="{{ busca }}">
         <button type="submit" class="btn btn-primary">Buscar</button>
         <a href="/matriculas/adicionar-matricula/aluno" class="btn btn-secondary ms-2">Limpar</a>

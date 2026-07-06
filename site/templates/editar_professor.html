@@ -6,18 +6,26 @@
 
     <p><br></p>
 
-    <h3>Atualizar informações do professor</h3>
+    <h1>Atualizar informações do professor</h1>
     <form action="/professores/atualizar-professor/{{ professor.id_prof }}" method="POST">
 
-        <input type="text" name="nome" placeholder="Nome do professor" value="{{ professor.nome }}" required>
+        <label for="nome">
+            <input type="text" name="nome" placeholder="Nome do professor" value="{{ professor.nome }}" required>
+        </label>
 
-        <input type="text" name="cpf" id="cpf" value="{{ professor.cpf }}" 
-            placeholder="000.000.000-00" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" 
-            title="Digite um CPF válido no formato 000.000.000-00" maxlength="14" required>
+        <label for="cpf">
+            <input type="text" name="cpf" id="cpf" value="{{ professor.cpf }}" 
+                placeholder="000.000.000-00" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" 
+                title="Digite um CPF válido no formato 000.000.000-00" maxlength="14" required>
+        </label>
 
-        <input type="text" name="email" placeholder="Email do professor" value="{{ professor.email }}" required>
-        
-        <label for="curso">Coordenador do curso:</label>
+        <label for="email">
+            <input type="text" name="email" placeholder="Email do professor" value="{{ professor.email }}" required>
+        </label>
+
+        </br>
+
+        <label for="curso">Coordenador do curso:
             <select name="id_curso_coord" id="curso" required>
                     <option value="0">Nenhum</option>
                 {% for curso in cursos %}
@@ -26,19 +34,19 @@
                         {{ curso.nome }}</option>
                 {% endfor %}
             </select>
+        </label>
 
-        </br>
-
-        <label for="titulacao">Titulacao:</label>
-        <select name="titulacao" id="titulacao" required>
-            <option value="" disabled>Selecione uma titulação</option>
-            <option value="Mestre" {% if professor.titulacao == "Mestre" %}selected{% endif %}>
-                Mestre</option>
-            <option value="Doutor" {% if professor.titulacao == "Doutor" %}selected{% endif %}>
-                Doutor</option>
-            <option value="Pos-doutor" {% if professor.titulo == "Pos-doutor" %}selected{% endif %}>
-                Pos-doutor</option>
-        </select>
+        <label for="titulacao">Titulacao:
+            <select name="titulacao" id="titulacao" required>
+                <option value="" disabled>Selecione uma titulação</option>
+                <option value="Mestre" {% if professor.titulacao == "Mestre" %}selected{% endif %}>
+                    Mestre</option>
+                <option value="Doutor" {% if professor.titulacao == "Doutor" %}selected{% endif %}>
+                    Doutor</option>
+                <option value="Pos-doutor" {% if professor.titulo == "Pos-doutor" %}selected{% endif %}>
+                    Pos-doutor</option>
+            </select>
+        </label>
         
         <button type="submit" class="btn btn-primary">Salvar Alterações</button>
     </form>

@@ -2,24 +2,29 @@
 
 {% block content %}
 
-    <a href="/cursos" class="btn btn-secondary btn-sm">Voltar</a>
+    <a href="/cursos" class="btn btn-secondary">Voltar</a>
 
     <p><br></p>
 
     <h3>Atualizar informações do Curso</h3>
     <form action="/cursos/atualizar-curso/{{ curso.id_curso }}" method="POST">
 
-        <input type="text" name="nome" placeholder="Nome do curso" value="{{ curso.nome }}" required>
+        <label for="nome">
+            <input type="text" name="nome" placeholder="Nome do curso" value="{{ curso.nome }}" required>
+        </label>
 
-        <input type="int" name="carga_horaria_total" placeholder="Carga Horária Total" value="{{ curso.ch_total }}" required>
+        <label for="ch_total">
+            <input type="int" name="carga_horaria_total" placeholder="Carga Horária Total" value="{{ curso.ch_total }}" required>
+        </label>
 
-        <label for="tipo">Tipo:</label>
-        <select name="tipo" id="tipo" required>
-            <option value="" disabled selected>Selecione um tipo</option>
-            <option value="Graduacao" {% if curso.tipo == "Graduacao" %}selected{% endif %}>Graduação</option>
-            <option value="Pos-Graduacao" {% if curso.tipo == "Pos-Graduacao" %}selected{% endif %}>Pós-Graduação</option>
-        </select>
-        
+        <label for="tipo">
+            <select name="tipo" id="tipo" required>
+                <option value="" disabled selected>Selecione um tipo</option>
+                <option value="Graduacao" {% if curso.tipo == "Graduacao" %}selected{% endif %}>Graduação</option>
+                <option value="Pos-Graduacao" {% if curso.tipo == "Pos-Graduacao" %}selected{% endif %}>Pós-Graduação</option>
+            </select>
+        </label>
+
         <button type="submit" class="btn btn-primary">Salvar Alterações</button>
     </form>
 

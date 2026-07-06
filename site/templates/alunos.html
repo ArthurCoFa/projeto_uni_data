@@ -5,24 +5,35 @@
     </br>
         <summary>Adicionar novo aluno</summary>
             <form action="/alunos/adicionar-alunos" method="POST">
-                <input type="text" name="nome" placeholder="Nome do aluno" required>
 
-                <input type="text" name="cpf" id="cpf" placeholder="000.000.000-00" 
-                    pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" title="Digite um CPF válido no formato 000.000.000-00" maxlength="14" required>
+                <label for="nome">
+                    <input type="text" name="nome" placeholder="Nome do aluno" required>
+                </label>
 
-                <input type="text" name="email" placeholder="Email do aluno" required>
+                <label for="cpf">
+                    <input type="text" name="cpf" id="cpf" placeholder="000.000.000-00" 
+                        pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" title="Digite um CPF válido no formato 000.000.000-00" 
+                        maxlength="14" required>
+                </label>
 
-                <label for="curso">Curso:</label>
+                <label for="email">
+                    <input type="text" name="email" placeholder="Email do aluno" required>
+                </label>
+
+                <label for="curso">
                     <select name="id_curso" id="curso" required>
                         <option value="" disabled selected>Selecione um curso</option>
                         {% for curso in cursos %}
                             <option value="{{ curso.id_curso }}">{{ curso.nome }}</option>
                         {% endfor %}
                     </select>
+                </label>
+                
+                <label for="data_nascimento">
+                    <input type="date" name="data_nascimento" required>
+                </label>
 
-                <input type="date" name="data_nascimento" required>
-
-                <button type="submit" class="btn btn-primary btn-sm">Cadastrar aluno</button>
+                <button type="submit" class="btn btn-primary">Cadastrar aluno</button>
             </form>
     </details> 
 
@@ -33,7 +44,7 @@
         <summary> Pesquisar alunos </summary>
 
         <form action="/alunos" method="GET" class="d-flex mb-3">
-            <input type="text" name="busca" class="form-control me-2" 
+            <input style="max-width: 1200px;" type="text" name="busca" class="form-control me-2" 
                 placeholder="Pesquisar por nome ou ID... (Deixe em branco para listar todos)" value="{{ busca }}">
             <button type="submit" class="btn btn-primary">Buscar</button>
             <a href="/alunos" class="btn btn-secondary ms-2">Limpar</a>

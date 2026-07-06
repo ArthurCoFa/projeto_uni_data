@@ -13,7 +13,7 @@ def pagina_matriculas():
 
     page = int(request.args.get('page', 1))  # Pega a página, padrão é 1
 
-    total_registros = contar_registros(TABELA, busca=busca)
+    total_registros = contar_registros(TABELA, busca=busca, campo_busca='id_mat')
 
     total_paginas = ceil(total_registros / PER_PAGE) if total_registros > 0 else 1
 
@@ -30,14 +30,24 @@ def pagina_matriculas():
     cursor = conn.cursor(dictionary=True)
 
     if busca:
-        querry = "SELECT m.id_mat, m.id_turma, m.id_aluno, m.dt_inscricao, m.nota, " \
-        "m.frequencia, m.situacao, a.nome AS aluno, d.nome AS disciplina " \
-        "FROM matriculas m JOIN turmas t ON t.id_turma = m.id_turma " \
-        "JOIN alunos a ON a.id_aluno = m.id_aluno " \
-        "JOIN disciplinas d ON d.id_disc = t.id_disc " \
-        "WHERE m.id_mat = %s" \
-        "ORDER BY m.id_mat"
-        cursor.execute(querry, (busca,))
+        if busca.isdigit():
+            querry = "SELECT m.id_mat, m.id_turma, m.id_aluno, m.dt_inscricao, m.nota, " \
+            "m.frequencia, m.situacao, a.nome AS aluno, d.nome AS disciplina " \
+            "FROM matriculas m JOIN turmas t ON t.id_turma = m.id_turma " \
+            "JOIN alunos a ON a.id_aluno = m.id_aluno " \
+            "JOIN disciplinas d ON d.id_disc = t.id_disc " \
+            "WHERE m.id_mat = %s" \
+            "ORDER BY m.id_mat"
+            cursor.execute(querry, (busca,))
+        else:
+            querry = "SELECT m.id_mat, m.id_turma, m.id_aluno, m.dt_inscricao, m.nota, " \
+            "m.frequencia, m.situacao, a.nome AS aluno, d.nome AS disciplina " \
+            "FROM matriculas m JOIN turmas t ON t.id_turma = m.id_turma " \
+            "JOIN alunos a ON a.id_aluno = m.id_aluno " \
+            "JOIN disciplinas d ON d.id_disc = t.id_disc " \
+            "WHERE a.nome LIKE %s" \
+            "ORDER BY m.id_mat"
+            cursor.execute(querry, ('%' + busca + '%',))
     else:
         # Traz todos
         querry = "SELECT m.id_mat, m.id_turma, m.id_aluno, m.dt_inscricao, m.nota, " \

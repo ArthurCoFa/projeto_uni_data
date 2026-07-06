@@ -2,35 +2,46 @@
 
 {% block content %}
 
-<a href="/turmas" class="btn btn-secondary btn-sm">Voltar</a>
+<a href="/turmas" class="btn btn-secondary">Voltar</a>
 
 <p><br></p>   
 
 <h3>Editar turma</h3>
     <form action="/turmas/atualizar_turma/{{ turma.id_turma }}" method="POST">
 
-        <label for="id_disciplina">Disciplina:</label>
+        <label for="id_disciplina">Disciplina:
             <select name="id_disc" id="id_disc" required>
+                <option value="" disabled>Selecione uma Disciplina</option>
                 {% for disciplina in disciplinas %}
                     <option value="{{ disciplina.id_disc }}" {% if disciplina.id_disc == turma.id_disc %}selected{% endif %}>
                         {{ disciplina.nome }}</option>
                 {% endfor %}
             </select>
+        </label>
 
-        <label for="id_prof">Professor:</label>
+        <label for="id_prof">Professor:
             <select name="id_prof" id="id_prof" required>
                 {% for professor in professores %}
                     <option value="{{ professor.id_prof }}" {% if professor.id_prof == turma.id_prof %}selected{% endif %}> 
                         {{ professor.nome }}</option>
                 {% endfor %}
             </select>
+        </label>
 
-        <input type="int" name="semestre" placeholder="semestre" value="{{ turma.semestre }}" required>
+        <br>
 
-        <input type="int" name="ano" placeholder="ano" value="{{ turma.ano }}" required>
+        <label for="semestre">Semestre:
+            <input type="int" name="semestre" placeholder="semestre" value="{{ turma.semestre }}" required>
+        </label>
 
-        <input type="int" name="capacidade" placeholder="capacidade" value="{{ turma.capacidade }}"required>
+        <label for="ano">Ano:
+            <input type="int" name="ano" placeholder="ano" value="{{ turma.ano }}" required>
+        </label>
 
-        <button type="submit">Atualizar turma</button>
+        <label for="capacidade">Capacidade:
+            <input type="int" name="capacidade" placeholder="capacidade" value="{{ turma.capacidade }}"required>
+        </label>
+
+        <button type="submit" class="btn btn-primary">Atualizar turma</button>
     </form>
 {% endblock %}

@@ -80,3 +80,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+
+  document.querySelectorAll('label')
+    .forEach(label => label.classList.add('form-label'));
+  // Adiciona .form-control para todos os inputs (exceto botões e checkboxes)
+  document.querySelectorAll('input:not([type="submit"]):not([type="button"]):not([type="checkbox"]):not([type="radio"])')
+    .forEach(input => input.classList.add('form-control'));
+    // Adiciona .form-select para todos os selects
+  document.querySelectorAll('select')
+    .forEach(select => select.classList.add('form-select'));
+});

@@ -2,21 +2,21 @@
 
 {% block content %}
 
-    <a href="/cursos" class="btn btn-secondary btn-sm">Voltar</a>
+    <a href="/cursos" class="btn btn-secondary">Voltar</a>
 
     <p><br></p>
 
     <h1>Adicionar disciplina no curso {{ curso.nome }}</h1>
 
     <a href="/cursos/editar-disciplinas-curso/{{ curso.id_curso }}/adicionar-disciplina/" 
-        class="btn btn-primary btn-sm">Adicionar</a>
+        class="btn btn-primary">Adicionar</a>
 
     <p><br></p>
 
     <h1 class="mb-4">Pesquisar Disciplinas</h1>
 
     <form action="/cursos/editar-disciplinas-curso/{{ curso.id_curso }}" method="GET" class="d-flex mb-3">
-        <input type="text" name="busca" class="form-control me-2" 
+        <input style="max-width: 1200px;" type="text" name="busca" class="form-control me-2" 
             placeholder="Pesquisar por nome ou ID... (Deixe em branco para listar todos)" value="{{ busca }}">
         <button type="submit" class="btn btn-primary">Buscar</button>
         <a href="/cursos/editar-disciplinas-curso/{{ curso.id_curso }}" class="btn btn-secondary ms-2">Limpar</a>

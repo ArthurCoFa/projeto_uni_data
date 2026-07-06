@@ -2,31 +2,41 @@
 
 {% block content %}
 
-    <a href="/alunos" class="btn btn-secondary btn-sm">Voltar</a>
+    <a href="/alunos" class="btn btn-secondary">Voltar</a>
 
     <p><br></p>
 
     <h3>Atualizar informações do aluno</h3>
     <form action="/alunos/editar-aluno/{{ aluno.id_aluno }}/atualizar" method="POST">
 
-        <input type="text" name="nome" placeholder="Nome do aluno" value="{{ aluno.nome }}" required>
+        <label for="nome">
+            <input type="text" name="nome" placeholder="Nome do aluno" value="{{ aluno.nome }}" required>
+        </label>
 
-        <input type="text" name="cpf" id="cpf" value="{{ aluno.cpf }}" 
-            placeholder="000.000.000-00" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" 
-            title="Digite um CPF válido no formato 000.000.000-00" maxlength="14" required>
+        <label for="cpf">
+            <input type="text" name="cpf" id="cpf" value="{{ aluno.cpf }}" 
+                placeholder="000.000.000-00" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" 
+                title="Digite um CPF válido no formato 000.000.000-00" maxlength="14" required>
+        </label>
 
-        <input type="text" name="email" placeholder="Email do aluno" value="{{ aluno.email }}" required>
+        <label for="email">
+            <input type="text" name="email" placeholder="Email do aluno" value="{{ aluno.email }}" required>
+        </label>
         
-        <label for="curso">Curso:</label>
+        <label for="curso">Curso:
             <select name="id_curso" id="curso" required>
+                <option value="" disabled>Selecione um curso</option>
                 {% for curso in cursos %}
                     <option value="{{ curso.id_curso }}" {% if curso.id_curso == aluno.id_curso %}selected{% endif %}>
                         {{ curso.nome }}
                     </option>
                 {% endfor %}
             </select>
+        </label>
 
-        <input type="date" name="data_nascimento" value="{{ aluno.dt_nasc }}" required>
+        <label for="dt_nasc">
+            <input type="date" name="data_nascimento" value="{{ aluno.dt_nasc }}" required>
+        </label>
         
         <button type="submit" class="btn btn-primary">Salvar Alterações</button>
     </form>

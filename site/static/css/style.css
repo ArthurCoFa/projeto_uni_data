@@ -37,3 +37,7 @@ nav a.ativo {
   font-weight: bold; /* Deixa o texto em negrito */
   border-bottom: 3px solid #007bff; /* Cria uma barrinha bonita embaixo do texto */
 }
+
+input, select{
+    max-width: 400px;
+}

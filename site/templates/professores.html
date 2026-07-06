@@ -5,32 +5,42 @@
         <br>
         <summary>Adicionar novo Professor</summary>
         <form action="/professores/adicionar-professor" method="POST">
-            <input type="text" name="nome" placeholder="Nome do professor" required>
 
-            <input type="text" name="cpf" id="cpf" placeholder="000.000.000-00" 
-                pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" title="Digite um CPF válido no formato 000.000.000-00" maxlength="14" required>
+            <label for="nome">
+                <input type="text" name="nome" placeholder="Nome do professor" required>
+            </label>
 
-            <input type="text" name="email" placeholder="Email do professor" required>
+            <label for="cpf">
+                <input type="text" name="cpf" id="cpf" placeholder="000.000.000-00" 
+                    pattern="\d{3}\.\d{3}\.\d{3}-\d{2}" title="Digite um CPF válido no formato 000.000.000-00" 
+                    maxlength="14" required>
+            </label>
+            
+            <label for="email">
+                <input type="text" name="email" placeholder="Email do professor" required>
+            </label>
 
-            </br>
+            <br>
 
-            <label for="curso">Coordenador do curso:</label>
+            <label for="curso">Coordenador do curso:
                 <select name="id_curso_coord" id="curso" required>
                         <option value="0">Nenhum</option>
                     {% for curso in cursos %}
                         <option value="{{ curso.id_curso }}">{{ curso.nome }}</option>
                     {% endfor %}
                 </select>
-            
-            <label for="titulacao">Titulacao:</label>
-            <select name="titulacao" id="titulacao" required>
-                <option value="" disabled selected>Selecione uma titulação</option>
-                <option value="Mestre">Mestre</option>
-                <option value="Doutor">Doutor</option>
-                <option value="Pos-doutor">Pos-doutor</option>
-            </select>
+            </label>
 
-            <button type="submit">Cadastrar professor</button>
+            <label for="titulacao">Titulacao:
+                <select name="titulacao" id="titulacao" required>
+                    <option value="" disabled selected>Selecione uma titulação</option>
+                    <option value="Mestre">Mestre</option>
+                    <option value="Doutor">Doutor</option>
+                    <option value="Pos-doutor">Pos-doutor</option>
+                </select>
+            </label>
+
+            <button type="submit" class="btn btn-primary btn-sm">Cadastrar professor</button>
         </form>
     </details>
 
@@ -40,7 +50,7 @@
         <summary>Pesquisar Professores</summary>
         <br>
         <form action="/professores" method="GET" class="d-flex mb-3">
-            <input type="text" name="busca" class="form-control me-2" 
+            <input style="max-width: 1200px;" type="text" name="busca" class="form-control me-2" 
                 placeholder="Pesquisar por nome ou ID... (Deixe em branco para listar todos)" value="{{ busca }}">
             <button type="submit" class="btn btn-primary">Buscar</button>
             <a href="/professores" class="btn btn-secondary ms-2">Limpar</a>
@@ -73,7 +83,7 @@
                         <a href="/professores/editar-professor/{{ professor.id_prof }}" class="btn btn-warning btn-sm">Editar</a>
                         <a href="/professores/excluir-professor/{{ professor.id_prof }}" 
                         class="btn btn-danger btn-sm" 
-                        onclick="return confirm('Tem certeza que deseja excluir este aluno?')">
+                        onclick="return confirm('Tem certeza que deseja excluir este professor?')">
                         Excluir
                         </a>
                     </td>

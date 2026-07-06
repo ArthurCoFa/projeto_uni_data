@@ -2,12 +2,21 @@
 
 {% block content %}
 
-<a href="/matriculas/adicionar-matricula/aluno" class="btn btn-secondary btn-sm">Adicionar matrícula</a>
+    <a href="/matriculas/adicionar-matricula/aluno" class="btn btn-secondary btn-sm">Adicionar matrícula</a>
 
 
-<p><br></p>
+    <p><br></p>
 
-<h1 class="mb-4">Lista de Matrículas</h1>
+    <h1> Pesquisar matriculas </h1>
+
+    <form action="/matriculas" method="GET" class="d-flex mb-3">
+        <input style="max-width: 1200px;" type="text" name="busca" class="form-control me-2" 
+            placeholder="Pesquisar por nome ou ID... (Deixe em branco para listar todos)" value="{{ busca }}">
+        <button type="submit" class="btn btn-primary">Buscar</button>
+        <a href="/matriculas" class="btn btn-secondary ms-2">Limpar</a>
+    </form>
+
+    <h1 class="mb-4">Lista de Matrículas</h1>
 
     <table class="table table-striped table-hover border">
         <thead class="table-dark">

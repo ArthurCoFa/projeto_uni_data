@@ -7,28 +7,37 @@
         <summary>Adicionar Turma</summary>
         <form action="/turmas/adicionar-turma" method="POST">
 
-            <label for="id_disciplina">Disciplina:</label>
+            <label for="id_disciplina">
                 <select name="id_disc" id="id_disc" required>
+                    <option value="" disabled selected>Selecione uma Disciplina</option>
                     {% for disciplina in disciplinas %}
                         <option value="{{ disciplina.id_disc }}">{{ disciplina.nome }}</option>
                     {% endfor %}
                 </select>
+            </label>
 
-            <label for="id_prof">Professor:</label>
+            <label for="id_prof">
                 <select name="id_prof" id="id_prof" required>
                     <option value="" disabled selected>Selecione um professor</option>
                     {% for professor in professores %}
                         <option value="{{ professor.id_prof }}">{{ professor.nome }}</option>
                     {% endfor %}
                 </select>
+            </label>
 
-            <input type="int" name="semestre" placeholder="Semestre" required>
+            <label for="semestre">
+                <input type="int" name="semestre" placeholder="Semestre" required>
+            </label>
 
             <br>
 
-            <input type="int" name="ano" placeholder="Ano" required>
+            <label for="ano">
+                <input type="int" name="ano" placeholder="Ano" required>
+            </label>
 
-            <input type="int" name="capacidade" placeholder="Capacidade" required>
+            <label for="capacidade">
+                <input type="int" name="capacidade" placeholder="Capacidade" required>
+            </label>
 
             <button type="submit" class="btn btn-primary btn-sm">Cadastrar Turma</button>
         </form>
@@ -41,7 +50,7 @@
         <summary>Pesquisar Turmas</summary>
 
         <form action="/turmas" method="GET" class="d-flex mb-3">
-                <input type="text" name="busca" class="form-control me-2" 
+                <input style="max-width: 1200px;" type="text" name="busca" class="form-control me-2" 
                     placeholder="Pesquisar por nome ou ID... (Deixe em branco para listar todos)" value="{{ busca }}">
                 <button type="submit" class="btn btn-primary">Buscar</button>
                 <a href="/turmas" class="btn btn-secondary ms-2">Limpar</a>

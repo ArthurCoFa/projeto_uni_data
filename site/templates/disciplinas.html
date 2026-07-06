@@ -7,15 +7,24 @@
         <br>
 
         <form action="/disciplinas/adicionar-disciplina" method="POST">
-            <input type="text" name="nome" placeholder="Nome da disciplina" required>
 
-            <input type="int" name="carga_horaria" placeholder="Carga Horária" required>
+            <label for="nome">
+                <input type="text" name="nome" placeholder="Nome da disciplina" required>
+            </label>
 
-            <input type="int" name="creditos" placeholder="Créditos da disciplina" required>
+            <label for="ch">
+                <input type="int" name="carga_horaria" placeholder="Carga Horária" required>
+            </label>
 
-            <input type="text" name="ementa" placeholder="Ementa">
+            <label for="creditos">
+                <input type="int" name="creditos" placeholder="Créditos da disciplina" required>
+            </label>
 
-            <button type="submit" class="btn btn-primary btn-sm">Cadastrar curso</button>
+            <label for="ementa">
+                <input type="text" name="ementa" placeholder="Ementa">
+            </label>
+
+            <button type="submit" class="btn btn-primary">Cadastrar Disciplina</button>
         </form>
     </details>
 
@@ -27,7 +36,7 @@
         <br>
 
         <form action="/disciplinas" method="GET" class="d-flex mb-3">
-            <input type="text" name="busca" class="form-control me-2" 
+            <input style="max-width: 1200px;" type="text" name="busca" class="form-control me-2" 
                 placeholder="Pesquisar por nome ou ID... (Deixe em branco para listar todos)" value="{{ busca }}">
             <button type="submit" class="btn btn-primary">Buscar</button>
             <a href="/disciplinas" class="btn btn-secondary ms-2">Limpar</a>

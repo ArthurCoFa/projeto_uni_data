@@ -5,11 +5,15 @@
 
     <form action="/matriculas/editar-matricula/{{ id_mat }}/rendimento" method="POST" class="d-flex mb-3">
         
-        <input type="number" step="any" name="nota" placeholder="Nota" required>
+        <label for="nota">
+            <input type="number" step="any" name="nota" placeholder="Nota" required>
+        </label>
 
-        <input type="int" name="frequencia" placeholder="Frequência" required>
+        <label for="frequencia">
+            <input type="int" name="frequencia" placeholder="Frequência" required>
+        </label>
 
-        <button type="submit">Editar matricula</button>
+        <button type="submit" class="btn btn-primary">Editar matricula</button>
 
     </form>
 {% endblock %}
