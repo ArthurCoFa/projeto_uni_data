@@ -25,16 +25,19 @@
 
         </br>
 
-        <label for="curso">Coordenador do curso:
-            <select name="id_curso_coord" id="curso" required>
-                    <option value="0">Nenhum</option>
+        <label for="curso_busca">Curso coordenado:
+            <input type="text" id="curso_busca" list="lista_cursos" 
+            placeholder="Digite o nome do curso" required value="{{ curso_coord }}">
+            
+            <datalist id="lista_cursos">
+                <option value="Nenhum" data-id="0">Nenhum
                 {% for curso in cursos %}
-                    <option value="{{ curso.id_curso }}"
-                        {% if curso.id_curso == professor.id_curso_coord %} selected {% endif %}>
-                        {{ curso.nome }}</option>
+                <option value="{{ curso.nome }}" data-id="{{ curso.id_curso }}">
                 {% endfor %}
-            </select>
+            </datalist>
         </label>
+
+        <input type="hidden" id="id_curso_enviar" name="id_curso_coord">
 
         <label for="titulacao">Titulacao:
             <select name="titulacao" id="titulacao" required>

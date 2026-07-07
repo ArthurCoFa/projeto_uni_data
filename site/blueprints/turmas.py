@@ -24,10 +24,10 @@ def pagina_turmas():
     total_paginas = ceil(total_registros / PER_PAGE) if total_registros > 0 else 1
 
     if page < 1: 
-        flash("Você foi redirecionado para a primeira página disponível.")
+        flash("Você foi redirecionado para a primeira página disponível.", "info")
         return redirect(url_for('turmas.pagina_turmas', page=1, busca=busca))
     elif page > total_paginas: 
-        flash("Você foi redirecionado para a última página disponível.")
+        flash("Você foi redirecionado para a última página disponível.", "info")
         return redirect(url_for('turmas.pagina_turmas', page=total_paginas, busca=busca))
         
     offset = (page - 1) * PER_PAGE          # Cálculo do pulo
@@ -98,7 +98,7 @@ def adicionar_turma():
     cursor.close()
     conn.close()
 
-    flash("Turma cadastrada com sucesso!")
+    flash("Turma cadastrada com sucesso!", "success")
     
     # Volta para a tela inicial
     return redirect('/turmas')
@@ -116,7 +116,7 @@ def excluir_turma(id_turma):
     cursor.close()
     conn.close()
     
-    flash("Disciplina excluída com sucesso!")
+    flash("Disciplina excluída com sucesso!", "success")
     return redirect('/turmas')
 
 @turmas_bp.route('/turmas/editar-turma/<int:id_turma>', methods=['GET'])
@@ -164,6 +164,6 @@ def atualizar_disciplina(id_turma):
     cursor.close()
     conn.close()
 
-    flash("Turma atulualizada com sucesso!")
+    flash("Turma atulualizada com sucesso!", "success")
     return redirect('/turmas')
 

@@ -22,16 +22,21 @@
 
             <br>
 
-            <label for="curso">Coordenador do curso:
-                <select name="id_curso_coord" id="curso" required>
-                        <option value="0">Nenhum</option>
+            <label for="curso_busca">Curso coordenado:
+                <input type="text" id="curso_busca" list="lista_cursos" 
+                placeholder="Digite o nome do curso" required>
+
+                <datalist id="lista_cursos">
+                    <option value="Nenhum" data-id="0">Nenhum
                     {% for curso in cursos %}
-                        <option value="{{ curso.id_curso }}">{{ curso.nome }}</option>
+                    <option value="{{ curso.nome }}" data-id="{{ curso.id_curso }}">
                     {% endfor %}
-                </select>
+                </datalist>
             </label>
 
-            <label for="titulacao">Titulacao:
+            <input type="hidden" id="id_curso_enviar" name="id_curso_coord">
+
+            <label for="titulacao">
                 <select name="titulacao" id="titulacao" required>
                     <option value="" disabled selected>Selecione uma titulação</option>
                     <option value="Mestre">Mestre</option>

@@ -18,10 +18,10 @@ def pagina_matriculas():
     total_paginas = ceil(total_registros / PER_PAGE) if total_registros > 0 else 1
 
     if page < 1: 
-        flash("Você foi redirecionado para a primeira página disponível.")
+        flash("Você foi redirecionado para a primeira página disponível.", "info")
         return redirect(url_for('matriculas.pagina_matriculas', page=1, busca=busca))
     elif page > total_paginas: 
-        flash("Você foi redirecionado para a última página disponível.")
+        flash("Você foi redirecionado para a última página disponível.", "info")
         return redirect(url_for('matriculas.pagina_matriculas', page=total_paginas, busca=busca))
         
     offset = (page - 1) * PER_PAGE          # Cálculo do pulo
@@ -79,10 +79,10 @@ def adicionar_aluno_matricula():
     total_paginas = ceil(total_registros / PER_PAGE) if total_registros > 0 else 1
 
     if page < 1: 
-        flash("Você foi redirecionado para a primeira página disponível.")
+        flash("Você foi redirecionado para a primeira página disponível.", "info")
         return redirect(url_for('matriculas.pagina_matriculas', page=1, busca=busca))
     elif page > total_paginas: 
-        flash("Você foi redirecionado para a última página disponível.")
+        flash("Você foi redirecionado para a última página disponível.", "info")
         return redirect(url_for('matriculas.pagina_matriculas', page=total_paginas, busca=busca))
         
     offset = (page - 1) * PER_PAGE          # Cálculo do pulo
@@ -127,10 +127,10 @@ def adicionar_turma_matricula(id_aluno):
     total_paginas = ceil(total_registros / PER_PAGE) if total_registros > 0 else 1
 
     if page < 1: 
-        flash("Você foi redirecionado para a primeira página disponível.")
+        flash("Você foi redirecionado para a primeira página disponível.", "info")
         return redirect(url_for('disciplinas.pagina_disciplinas', page=1, busca=busca))
     elif page > total_paginas: 
-        flash("Você foi redirecionado para a última página disponível.")
+        flash("Você foi redirecionado para a última página disponível.", "info")
         return redirect(url_for('disciplinas.pagina_disciplinas', page=total_paginas, busca=busca)) 
 
     offset = (page - 1) * PER_PAGE          # Cálculo do pulo
@@ -192,7 +192,7 @@ def adicionar_matricula_final(id_aluno, id_turma):
     cursor.close()
     conn.close()
 
-    flash("Matricula cadastrada com sucesso!")
+    flash("Matricula cadastrada com sucesso!", "success")
     
     # Volta para a tela inicial
     return redirect('/matriculas')
@@ -210,7 +210,7 @@ def excluir_matricula(id_mat):
     cursor.close()
     conn.close()
     
-    flash("Disciplina excluída com sucesso!")
+    flash("Disciplina excluída com sucesso!", "success")
     return redirect('/matriculas')
 
 @matriculas_bp.route('/matriculas/editar-matricula/<int:id_mat>')
@@ -242,7 +242,7 @@ def editar_matricula_final(id_mat):
     cursor.close()
     conn.close()
 
-    flash("Matricula editada com sucesso!")
+    flash("Matricula editada com sucesso!", "success")
     
     # Volta para a tela inicial
     return redirect('/matriculas')

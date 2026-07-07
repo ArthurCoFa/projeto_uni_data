@@ -20,14 +20,18 @@
                     <input type="text" name="email" placeholder="Email do aluno" required>
                 </label>
 
-                <label for="curso">
-                    <select name="id_curso" id="curso" required>
-                        <option value="" disabled selected>Selecione um curso</option>
+                <label for="curso_busca">
+                    <input type="text" id="curso_busca" list="lista_cursos" 
+                    placeholder="Digite o nome do curso e selecione a opção" required>
+
+                    <datalist id="lista_cursos">
                         {% for curso in cursos %}
-                            <option value="{{ curso.id_curso }}">{{ curso.nome }}</option>
+                        <option value="{{ curso.nome }}" data-id="{{ curso.id_curso }}">
                         {% endfor %}
-                    </select>
+                    </datalist>
                 </label>
+
+                <input type="hidden" id="id_curso_enviar" name="id_curso">
                 
                 <label for="data_nascimento">
                     <input type="date" name="data_nascimento" required>

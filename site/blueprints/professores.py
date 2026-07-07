@@ -18,10 +18,10 @@ def pagina_professores():
     total_paginas = ceil(total_registros / PER_PAGE) if total_registros > 0 else 1
 
     if page < 1: 
-        flash("Você foi redirecionado para a primeira página disponível.")
+        flash("Você foi redirecionado para a primeira página disponível.", "info")
         return redirect(url_for('professores.pagina_professores', page=1, busca=busca))
     elif page > total_paginas: 
-        flash("Você foi redirecionado para a última página disponível.")
+        flash("Você foi redirecionado para a última página disponível.", "info")
         return redirect(url_for('professores.pagina_professores', page=total_paginas, busca=busca))
 
     offset = (page - 1) * PER_PAGE          # Cálculo do pulo
@@ -84,9 +84,8 @@ def adicionar_professor():
         id_curso_coord = None
 
     if len(cpf_limpo) != 11:
-        # Aqui você poderia usar o sistema de 'flash' do Flask 
-        # para mostrar uma mensagem de erro na tela
-        return "Erro: CPF inválido! Deve conter 11 números.", 400
+        flash("CPF inválido, tente novamente", "danger")
+        return redirect(url_for('alunos.pagina_alunos'))
     
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -99,7 +98,7 @@ def adicionar_professor():
     cursor.close()
     conn.close()
 
-    flash("Professor cadastrado com sucesso!")
+    flash("Professor cadastrado com sucesso!", "success")
     
     # Volta para a tela inicial
     return redirect('/professores')
@@ -116,7 +115,7 @@ def excluir_professor(id_prof):
     cursor.close()
     conn.close()
     
-    flash("Professor excluído com sucesso!")
+    flash("Professor excluído com sucesso!", "success")
     return redirect('/professores')
 
 @professores_bp.route('/professores/editar-professor/<int:id_prof>', methods=['GET'])
@@ -130,9 +129,16 @@ def editar_professor(id_prof):
     cursor.execute("SELECT * FROM cursos")
     cursos = cursor.fetchall()
 
+    querry = "SELECT c.nome AS curso FROM cursos c JOIN professores p ON p.id_curso_coord = c.id_curso " \
+    "WHERE p.id_prof = %s"
+
+    cursor.execute(querry, (id_prof,))
+    resultado = cursor.fetchone()
+    curso_coord = resultado['curso'] if resultado != None else ""
+
     cursor.close()
     conn.close()
-    return render_template('editar_professor.html', professor=professor, cursos=cursos)
+    return render_template('editar_professor.html', professor=professor, cursos=cursos, curso_coord=curso_coord)
 
 @professores_bp.route('/professores/atualizar-professor/<int:id_prof>', methods=['POST'])
 def atualizar_professor(id_prof):
@@ -147,6 +153,9 @@ def atualizar_professor(id_prof):
     titulacao = request.form['titulacao']
 
     id_curso_coord = request.form['id_curso_coord']
+
+    if id_curso_coord == '0':
+        id_curso_coord = None
     
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -157,5 +166,5 @@ def atualizar_professor(id_prof):
     cursor.close()
     conn.close()
     
-    flash("Dados atualizados com sucesso!")
+    flash("Dados atualizados com sucesso!", "success")
     return redirect('/professores')

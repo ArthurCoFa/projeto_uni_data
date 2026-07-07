@@ -19,10 +19,10 @@ def pagina_alunos():
     total_paginas = ceil(total_registros / PER_PAGE) if total_registros > 0 else 1
 
     if page < 1: 
-        flash("Você foi redirecionado para a primeira página disponível.")
+        flash("Você foi redirecionado para a primeira página disponível.", "info")
         return redirect(url_for('alunos.pagina_alunos', page=1, busca=busca))
     elif page > total_paginas: 
-        flash("Você foi redirecionado para a última página disponível.")
+        flash("Você foi redirecionado para a última página disponível.", "info")
         return redirect(url_for('alunos.pagina_alunos', page=total_paginas, busca=busca))
 
     offset = (page - 1) * PER_PAGE          # Cálculo do pulo
@@ -67,7 +67,7 @@ def adicionar_aluno():
     nascimento = request.form['data_nascimento']
 
     if date.fromisoformat(nascimento) > date.today():
-        flash("Data de nascimento inválida! O aluno não pode ter nascido no futuro.")
+        flash("Data de nascimento inválida! O aluno não pode ter nascido no futuro.", "danger")
         return redirect(url_for('alunos.pagina_alunos'))
 
     cpf_form = request.form['cpf']
@@ -75,11 +75,16 @@ def adicionar_aluno():
     cpf_limpo = "".join(filter(str.isdigit, cpf_form))
 
     if len(cpf_limpo) != 11:
-        return "Erro: CPF inválido! Deve conter 11 números.", 400
+        flash("CPF inválido, tente novamente", "danger")
+        return redirect(url_for('alunos.pagina_alunos'))
 
     email = request.form['email']
 
     id_curso = request.form['id_curso']
+
+    if not id_curso or id_curso == "":
+        flash("Erro: Curso inválido ou não selecionado na lista!", "danger")
+        return redirect(url_for('alunos.pagina_alunos'))
     
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -92,7 +97,7 @@ def adicionar_aluno():
     cursor.close()
     conn.close()
 
-    flash("Aluno cadastrado com sucesso!")
+    flash("Aluno cadastrado com sucesso!", "success")
     
     # Volta para a tela inicial
     return redirect('/alunos')
@@ -110,7 +115,7 @@ def excluir_aluno(id_aluno):
     cursor.close()
     conn.close()
     
-    flash("Aluno excluído com sucesso!")
+    flash("Aluno excluído com sucesso!", "success")
     return redirect('/alunos')
 
 @alunos_bp.route('/alunos/editar-aluno/<int:id_aluno>', methods=['GET'])
@@ -153,5 +158,5 @@ def atualizar_aluno(id_aluno):
     cursor.close()
     conn.close()
     
-    flash("Dados atualizados com sucesso!")
+    flash("Dados atualizados com sucesso!", "success")
     return redirect('/alunos')

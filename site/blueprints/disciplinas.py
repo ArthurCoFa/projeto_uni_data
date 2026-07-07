@@ -18,10 +18,10 @@ def pagina_disciplinas():
     total_paginas = ceil(total_registros / PER_PAGE) if total_registros > 0 else 1
 
     if page < 1: 
-        flash("Você foi redirecionado para a primeira página disponível.")
+        flash("Você foi redirecionado para a primeira página disponível.", "info")
         return redirect(url_for('disciplinas.pagina_disciplinas', page=1, busca=busca))
     elif page > total_paginas: 
-        flash("Você foi redirecionado para a última página disponível.")
+        flash("Você foi redirecionado para a última página disponível.", "info")
         return redirect(url_for('disciplinas.pagina_disciplinas', page=total_paginas, busca=busca))
 
     offset = (page - 1) * PER_PAGE          # Cálculo do pulo
@@ -74,7 +74,7 @@ def adicionar_disciplina():
     cursor.close()
     conn.close()
 
-    flash("Disciplinas cadastrada com sucesso!")
+    flash("Disciplinas cadastrada com sucesso!", "success")
     
     # Volta para a tela inicial
     return redirect('/disciplinas')
@@ -91,7 +91,7 @@ def excluir_disciplina(id_disc):
     cursor.close()
     conn.close()
     
-    flash("Disciplina excluída com sucesso!")
+    flash("Disciplina excluída com sucesso!", "success")
     return redirect('/disciplinas')
 
 @disciplinas_bp.route('/disciplinas/editar-disciplina/<int:id_disc>', methods=['GET'])
@@ -128,7 +128,7 @@ def atualizar_disciplina(id_disc):
     cursor.close()
     conn.close()
     
-    flash("Dados atualizados com sucesso!")
+    flash("Dados atualizados com sucesso!", "success")
     return redirect('/disciplinas')
 
 @disciplinas_bp.route('/disciplinas/editar-disciplina/<int:id_disc>/editar-pre-requisitos')
@@ -168,10 +168,10 @@ def editar_pre_requisitos(id_disc):
     offset = (page - 1) * PER_PAGE         # Cálculo do pulo
 
     if page < 1: 
-        flash("Você foi redirecionado para a primeira página disponível.")
+        flash("Você foi redirecionado para a primeira página disponível.", "info")
         return redirect(url_for('disciplinas.pagina_disciplinas', page=1, busca=busca))
     elif page > total_paginas: 
-        flash("Você foi redirecionado para a última página disponível.")
+        flash("Você foi redirecionado para a última página disponível.", "info")
         return redirect(url_for('disciplinas.pagina_disciplinas', page=total_paginas, busca=busca))
 
     querry = "SELECT d.nome AS disciplina, d.id_disc AS id_d FROM disciplinas d " \
@@ -229,7 +229,7 @@ def adicionar_pre_requisito(id_disc, id_pre_req):
     cursor.close()
     conn.close()
     
-    flash("Dados atualizados com sucesso!")
+    flash("Dados atualizados com sucesso!", "success")
     return redirect(url_for('disciplinas.editar_pre_requisitos', id_disc=id_disc))
 
 
@@ -246,5 +246,5 @@ def excluir_pre_requisito(id_disc, id_pre_req):
     cursor.close()
     conn.close()
     
-    flash("Disciplina excluída com sucesso!")
+    flash("Disciplina excluída com sucesso!", "success")
     return redirect(url_for('disciplinas.editar_pre_requisitos', id_disc=id_disc))

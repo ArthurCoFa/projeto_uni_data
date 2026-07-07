@@ -38,16 +38,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
-
-    // 2. Lógica para BLOQUEAR o envio se o ID for inválido
-    formulario.addEventListener('submit', function(event) {
-        // Se o input oculto estiver vazio ou não numérico, cancela o envio imediatamente
-        if (!hiddenInput.value || hiddenInput.value.trim() === "") {
-            event.preventDefault(); // Para o envio para o servidor aqui!
-            alert("Erro: Você precisa escolher um curso válido da lista suspensa.");
-            inputBusca.focus();
-        }
-    });
 });
 
 document.addEventListener("DOMContentLoaded", () => {

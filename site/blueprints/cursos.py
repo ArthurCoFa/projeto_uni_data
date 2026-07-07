@@ -18,10 +18,10 @@ def pagina_cursos():
     total_paginas = ceil(total_registros / PER_PAGE) if total_registros > 0 else 1
 
     if page < 1: 
-        flash("Você foi redirecionado para a primeira página disponível.")
+        flash("Você foi redirecionado para a primeira página disponível.", "info")
         return redirect(url_for('cursos.pagina_cursos', page=1, busca=busca))
     elif page > total_paginas: 
-        flash("Você foi redirecionado para a última página disponível.")
+        flash("Você foi redirecionado para a última página disponível.", "info")
         return redirect(url_for('cursos.pagina_cursos', page=total_paginas, busca=busca))
 
     offset = (page - 1) * PER_PAGE          # Cálculo do pulo
@@ -76,7 +76,7 @@ def adicionar_curso():
     cursor.close()
     conn.close()
 
-    flash("Curso cadastrado com sucesso!")
+    flash("Curso cadastrado com sucesso!", "success")
     
     # Volta para a tela inicial
     return redirect('/cursos')
@@ -93,7 +93,7 @@ def excluir_curso(id_curso):
     cursor.close()
     conn.close()
     
-    flash("Curso excluído com sucesso!")
+    flash("Curso excluído com sucesso!", "success")
     return redirect('/cursos')
 
 @cursos_bp.route('/cursos/editar-curso/<int:id_curso>', methods=['GET'])
@@ -125,7 +125,7 @@ def atualizar_curso(id_curso):
     cursor.close()
     conn.close()
     
-    flash("Dados atualizados com sucesso!")
+    flash("Dados atualizados com sucesso!", "success")
     return redirect('/cursos')
 
 @cursos_bp.route('/cursos/editar-disciplinas-curso/<int:id_curso>', methods=['GET'])
@@ -152,11 +152,11 @@ def editar_disciplinas_curso(id_curso):
 
     if page < 1: 
         page = 1
-        flash("Você foi redirecionado para a primeira página disponível.")
+        flash("Você foi redirecionado para a primeira página disponível.", "info")
         return redirect(url_for('cursos.editar_disciplinas_curso', page=1, busca=busca, id_curso=id_curso))
     elif page > total_paginas: 
         page = total_paginas
-        flash("Você foi redirecionado para a última página disponível.")
+        flash("Você foi redirecionado para a última página disponível.", "info")
         return redirect(url_for('cursos.editar_disciplinas_curso', page=total_paginas, busca=busca, id_curso=id_curso))
 
     offset = (page - 1) * PER_PAGE
@@ -209,7 +209,7 @@ def alternar_obrigatoriedade_disciplina(id_curso, id_disc):
     cursor.close()
     conn.close()
     
-    flash("Dados atualizados com sucesso!")
+    flash("Dados atualizados com sucesso!", "success")
     return redirect(url_for('cursos.editar_disciplinas_curso', id_curso=id_curso))
 
 @cursos_bp.route("/curso/editar-disciplinas-curso/<int:id_curso>/disciplina/<int:id_disc>/excluir")
@@ -224,7 +224,7 @@ def excluir_disciplina_curso(id_curso, id_disc):
     cursor.close()
     conn.close()
     
-    flash("Dados atualizados com sucesso!")
+    flash("Disciplina excluida com sucesso!", "success")
     return redirect(url_for('cursos.editar_disciplinas_curso', id_curso=id_curso))
 
 @cursos_bp.route("/cursos/editar-disciplinas-curso/<int:id_curso>/adicionar-disciplina/")
@@ -273,10 +273,10 @@ def pagina_adicionar_disciplina_curso(id_curso):
     total_paginas = ceil(total_registros / PER_PAGE) if total_registros > 0 else 1
 
     if page < 1: 
-        flash("Você foi redirecionado para a primeira página disponível.")
+        flash("Você foi redirecionado para a primeira página disponível.", "info")
         return redirect(url_for('cursos.pagina_adicionar_disciplina_curso', page=1, busca=busca, id_curso=id_curso))
     elif page > total_paginas: 
-        flash("Você foi redirecionado para a última página disponível.")
+        flash("Você foi redirecionado para a última página disponível.", "info")
         return redirect(url_for('cursos.pagina_adicionar_disciplina_curso', page=total_paginas, busca=busca, id_curso=id_curso))
 
     offset = (page - 1) * PER_PAGE
@@ -339,6 +339,6 @@ def adicionar_disciplina_curso(id_curso, id_disc):
     cursor.close()
     conn.close()
 
-    flash("Disciplina adicionada com sucesso.")
+    flash("Disciplina adicionada com sucesso.", "success")
 
     return redirect(url_for('cursos.editar_disciplinas_curso', id_curso=id_curso))
